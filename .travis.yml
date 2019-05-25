@@ -3,9 +3,8 @@ language: go
 go:
   - 1.12.x
 
-install:
- - curl https://glide.sh/get | sh
- - glide install
+env:
+  - GO111MODULE=on
 
 deploy:
 - provider: script
