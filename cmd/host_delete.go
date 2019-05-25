@@ -1,8 +1,7 @@
 package cmd
 
 import (
-	"nagios-cli/nagios"
-
+	"github.com/romainDavaze/nagios-cli/nagios"
 	"github.com/spf13/cobra"
 )
 

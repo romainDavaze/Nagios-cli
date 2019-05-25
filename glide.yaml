@@ -1,4 +1,6 @@
 package: github.com/romainDavaze/nagios-cli
+ignore:
+- nagios-cli/cmd
 import:
 - package: github.com/mitchellh/go-homedir
   version: ^1.1.0
@@ -10,3 +12,4 @@ import:
   version: ^1.4.0
 - package: gopkg.in/yaml.v2
   version: ^2.2.2
+- package: nagios-cli/cmd

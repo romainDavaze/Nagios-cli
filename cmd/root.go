@@ -2,10 +2,10 @@ package cmd
 
 import (
 	"fmt"
-	"nagios-cli/nagios"
 	"os"
 
 	homedir "github.com/mitchellh/go-homedir"
+	"github.com/romainDavaze/nagios-cli/nagios"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

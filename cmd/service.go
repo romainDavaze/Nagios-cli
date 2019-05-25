@@ -3,9 +3,9 @@ package cmd
 import (
 	"io/ioutil"
 	"log"
-	"nagios-cli/nagios"
 
 	"github.com/mitchellh/mapstructure"
+	"github.com/romainDavaze/nagios-cli/nagios"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 )
