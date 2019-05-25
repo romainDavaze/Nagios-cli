@@ -16,12 +16,13 @@ var deleteHostCmd = &cobra.Command{
 		for _, host := range hosts {
 			nagios.DeleteHost(nagiosConfig, host)
 		}
+
+		if applyConfig {
+			nagios.ApplyConfig(nagiosConfig)
+		}
 	},
 }
 
 func init() {
 	hostCmd.AddCommand(deleteHostCmd)
-
-	deleteHostCmd.Flags().StringVarP(&nagiosFile, "file", "f", "", "file containing hosts to delete")
-	cobra.MarkFlagRequired(deleteHostCmd.Flags(), "file")
 }

@@ -3,6 +3,7 @@ package nagios
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -53,7 +54,7 @@ func AddHost(config Config, host Host) {
 	defer resp.Body.Close()
 
 	body, _ := ioutil.ReadAll(resp.Body)
-	log.Printf("Added host %q: %s", host.HostName, string(body))
+	fmt.Printf("Added host %q: %s", host.HostName, string(body))
 }
 
 // DeleteHost deletes a hosts from Nagios
@@ -73,5 +74,5 @@ func DeleteHost(config Config, host Host) {
 
 	body, _ := ioutil.ReadAll(resp.Body)
 
-	log.Printf("Deleted host %q: %s", host.HostName, string(body))
+	fmt.Printf("Deleted host %q: %s", host.HostName, string(body))
 }

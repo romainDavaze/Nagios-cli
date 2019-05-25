@@ -12,6 +12,7 @@ import (
 
 const basePath = "api/v1"
 
+var applyConfig bool
 var nagiosConfig nagios.Config
 
 // App configuration file
@@ -65,7 +66,7 @@ func initConfig() {
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+		fmt.Printf("Using config file: %s \n\n", viper.ConfigFileUsed())
 	}
 
 	nagiosConfig = nagios.Config{

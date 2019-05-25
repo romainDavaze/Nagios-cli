@@ -18,6 +18,10 @@ var serviceCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(serviceCmd)
+
+	serviceCmd.PersistentFlags().BoolVar(&applyConfig, "applyconfig", false, "indicate whether changes should be applied or not (false by default)")
+	serviceCmd.PersistentFlags().StringVarP(&nagiosFile, "file", "f", "", "file containing services to add")
+	cobra.MarkFlagRequired(serviceCmd.PersistentFlags(), "file")
 }
 
 func parseServices() []nagios.Service {

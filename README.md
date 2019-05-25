@@ -17,6 +17,7 @@ You can see an example [here](examples/nagios-cli.yaml).
 You can add and delete several Nagios objects by providing a specific file as a parameter.
 
 As of now, these objects are supported :
+- Hosts ([example](examples/hosts.yaml))
 - Services ([example](examples/services.yaml))
 
 

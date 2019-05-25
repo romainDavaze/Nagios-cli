@@ -16,12 +16,13 @@ var addServiceCmd = &cobra.Command{
 		for _, service := range services {
 			nagios.AddService(nagiosConfig, service)
 		}
+
+		if applyConfig {
+			nagios.ApplyConfig(nagiosConfig)
+		}
 	},
 }
 
 func init() {
 	serviceCmd.AddCommand(addServiceCmd)
-
-	addServiceCmd.Flags().StringVarP(&nagiosFile, "file", "f", "", "file containing services to add")
-	cobra.MarkFlagRequired(addServiceCmd.Flags(), "file")
 }

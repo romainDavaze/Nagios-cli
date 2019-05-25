@@ -16,12 +16,13 @@ var deleteServiceCmd = &cobra.Command{
 		for _, service := range services {
 			nagios.DeleteService(nagiosConfig, service)
 		}
+
+		if applyConfig {
+			nagios.ApplyConfig(nagiosConfig)
+		}
 	},
 }
 
 func init() {
 	serviceCmd.AddCommand(deleteServiceCmd)
-
-	deleteServiceCmd.Flags().StringVarP(&nagiosFile, "file", "f", "", "file containing services to delete")
-	cobra.MarkFlagRequired(deleteServiceCmd.Flags(), "file")
 }

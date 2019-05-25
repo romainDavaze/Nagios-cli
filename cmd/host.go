@@ -18,6 +18,10 @@ var hostCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(hostCmd)
+
+	hostCmd.PersistentFlags().BoolVar(&applyConfig, "applyconfig", false, "indicate whether changes should be applied or not (false by default)")
+	hostCmd.PersistentFlags().StringVarP(&nagiosFile, "file", "f", "", "file containing Nagios hosts")
+	cobra.MarkFlagRequired(hostCmd.PersistentFlags(), "file")
 }
 
 func parseHosts() []nagios.Host {

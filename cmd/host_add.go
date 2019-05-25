@@ -16,12 +16,13 @@ var addHostCmd = &cobra.Command{
 		for _, host := range hosts {
 			nagios.AddHost(nagiosConfig, host)
 		}
+
+		if applyConfig {
+			nagios.ApplyConfig(nagiosConfig)
+		}
 	},
 }
 
 func init() {
 	hostCmd.AddCommand(addHostCmd)
-
-	addHostCmd.Flags().StringVarP(&nagiosFile, "file", "f", "", "file containing hosts to add")
-	cobra.MarkFlagRequired(addHostCmd.Flags(), "file")
 }
