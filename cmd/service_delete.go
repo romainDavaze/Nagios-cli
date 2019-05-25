@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var deleteCmd = &cobra.Command{
+var deleteServiceCmd = &cobra.Command{
 	Use:   "delete",
 	Short: "Delete a single or multiples Nagios service(s)",
 	Long:  "Delete a single or multiples Nagios service(s)",
@@ -20,8 +20,8 @@ var deleteCmd = &cobra.Command{
 }
 
 func init() {
-	serviceCmd.AddCommand(deleteCmd)
+	serviceCmd.AddCommand(deleteServiceCmd)
 
-	deleteCmd.Flags().StringVarP(&nagiosFile, "file", "f", "", "file containing services to delete")
-	cobra.MarkFlagRequired(deleteCmd.Flags(), "file")
+	deleteServiceCmd.Flags().StringVarP(&nagiosFile, "file", "f", "", "file containing services to delete")
+	cobra.MarkFlagRequired(deleteServiceCmd.Flags(), "file")
 }

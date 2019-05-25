@@ -55,7 +55,7 @@ func AddService(config Config, service Service) {
 	defer resp.Body.Close()
 
 	body, _ := ioutil.ReadAll(resp.Body)
-	log.Printf("Added service %s for host %s:\n %s", service.ServiceDescription, service.HostName, string(body))
+	log.Printf("Added service %q for host %q: %s", service.ServiceDescription, service.HostName, string(body))
 }
 
 // DeleteService deletes a service from Nagios
@@ -65,7 +65,7 @@ func DeleteService(config Config, service Service) {
 
 	client := &http.Client{}
 
-	req, _ := http.NewRequest("DELETE", "http://"+config.Host+"/"+config.BasePath+"?apikey="+config.APIKey, bytes.NewBuffer(requestBody))
+	req, _ := http.NewRequest("DELETE", "http://"+config.Host+"/"+config.BasePath+"/service?apikey="+config.APIKey, bytes.NewBuffer(requestBody))
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Fatalf("Error while making DELETE request to Nagios API: %s", err)

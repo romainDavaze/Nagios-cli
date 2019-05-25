@@ -1,21 +1,19 @@
 ---
 
-services:
-  - checkCommand: check_ping # Mandatory
+hosts:
+  - address: 127.0.0.1
+    checkCommand: check_ping # Mandatory
     checkCommandArgs:
       - 3000,80%
       - 5000,100%
-    checkInterval: 5
     checkPeriod: 24x7
     contacts: # Specify either contacts or contactGroups but not both
       - nagiosadmin
-    # contactGroups:
+    # contactGroups: # Specify either contacts or contactGroups but not both
     #   - admins
     hostName: machineA # Mandatory
     maxCheckAttempts: 2
     notificationInterval: 5
     notificationPeriod: 24x7
-    retryInterval: 5
-    serviceDescription: This is a ping service
-  # - checkCommand: ...
+  # - address: ...
   #   ....

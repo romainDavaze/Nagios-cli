@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var addCmd = &cobra.Command{
+var addServiceCmd = &cobra.Command{
 	Use:   "add",
 	Short: "Add a single or multiples Nagios service(s)",
 	Long:  "Add a single or multiples Nagios service(s)",
@@ -20,8 +20,8 @@ var addCmd = &cobra.Command{
 }
 
 func init() {
-	serviceCmd.AddCommand(addCmd)
+	serviceCmd.AddCommand(addServiceCmd)
 
-	addCmd.Flags().StringVarP(&nagiosFile, "file", "f", "", "file containing services to add")
-	cobra.MarkFlagRequired(addCmd.Flags(), "file")
+	addServiceCmd.Flags().StringVarP(&nagiosFile, "file", "f", "", "file containing services to add")
+	cobra.MarkFlagRequired(addServiceCmd.Flags(), "file")
 }
