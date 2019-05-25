@@ -47,7 +47,7 @@ func AddService(config Config, service Service) {
 	requestBody, _ := service.MarshalJSON()
 	requestBody, _ = AddApplyConfigToJSON(requestBody)
 
-	resp, err := http.Post("http://"+config.Host+"/"+config.BasePath+"?apikey="+config.APIKey, "application/json", bytes.NewBuffer(requestBody))
+	resp, err := http.Post("http://"+config.Host+"/"+config.BasePath+"/config/service?apikey="+config.APIKey, "application/json", bytes.NewBuffer(requestBody))
 	if err != nil {
 		log.Fatalf("Error while making POST request to Nagios API: %s", err)
 	}
@@ -65,7 +65,7 @@ func DeleteService(config Config, service Service) {
 
 	client := &http.Client{}
 
-	req, _ := http.NewRequest("DELETE", "http://"+config.Host+"/"+config.BasePath+"/service?apikey="+config.APIKey, bytes.NewBuffer(requestBody))
+	req, _ := http.NewRequest("DELETE", "http://"+config.Host+"/"+config.BasePath+"/config/service?apikey="+config.APIKey, bytes.NewBuffer(requestBody))
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Fatalf("Error while making DELETE request to Nagios API: %s", err)

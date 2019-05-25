@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-const basePath = "api/v1/config"
+const basePath = "api/v1"
 
 var nagiosConfig nagios.Config
 

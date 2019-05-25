@@ -45,7 +45,7 @@ func AddHost(config Config, host Host) {
 	requestBody, _ := host.MarshalJSON()
 	requestBody, _ = AddApplyConfigToJSON(requestBody)
 
-	resp, err := http.Post("http://"+config.Host+"/"+config.BasePath+"/host?apikey="+config.APIKey, "application/json", bytes.NewBuffer(requestBody))
+	resp, err := http.Post("http://"+config.Host+"/"+config.BasePath+"/config/host?apikey="+config.APIKey, "application/json", bytes.NewBuffer(requestBody))
 	if err != nil {
 		log.Fatalf("Error while making POST request to Nagios API: %s", err)
 	}
@@ -63,7 +63,7 @@ func DeleteHost(config Config, host Host) {
 
 	client := &http.Client{}
 
-	req, _ := http.NewRequest("DELETE", "http://"+config.Host+"/"+config.BasePath+"/host?apikey="+config.APIKey, bytes.NewBuffer(requestBody))
+	req, _ := http.NewRequest("DELETE", "http://"+config.Host+"/"+config.BasePath+"/config/host?apikey="+config.APIKey, bytes.NewBuffer(requestBody))
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Fatalf("Error while making DELETE request to Nagios API: %s", err)
