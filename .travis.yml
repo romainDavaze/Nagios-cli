@@ -5,9 +5,15 @@ go:
   - 1.11.x
   - 1.12.x
 
-install:
+env:
+  - GO111MODULE=on
+
+before_install:
  - curl https://glide.sh/get | sh
  - glide install
+
+script:
+  - echo 'foo'
 
 deploy:
 - provider: script
