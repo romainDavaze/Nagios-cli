@@ -3,9 +3,6 @@ language: go
 go:
   - 1.12.x
 
-env:
-  - GO111MODULE=on
-
 install:
  - curl https://glide.sh/get | sh
  - glide install
