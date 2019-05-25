@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"nagios-cli/nagios"
 	"os"
 
 	homedir "github.com/mitchellh/go-homedir"
@@ -9,17 +10,15 @@ import (
 	"github.com/spf13/viper"
 )
 
-// API key to interact with Nagios API
-var apiKey string
+const basePath = "api/v1/config"
+
+var nagiosConfig nagios.Config
 
 // App configuration file
 var cfgFile string
 
 // File containing Nagios objects to parse
 var nagiosFile string
-
-// Nagios host
-var nagiosHost string
 
 var rootCmd = &cobra.Command{
 	Use:   "nagios-cli",
@@ -69,6 +68,9 @@ func initConfig() {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
 
-	nagiosHost = viper.GetString("nagiosHost")
-	apiKey = viper.GetString("apiKey")
+	nagiosConfig = nagios.Config{
+		APIKey:   viper.GetString("apiKey"),
+		Host:     viper.GetString("nagiosHost"),
+		BasePath: basePath,
+	}
 }

@@ -14,7 +14,7 @@ var addCmd = &cobra.Command{
 		services := parseServices()
 
 		for _, service := range services {
-			nagios.AddService(nagiosHost, apiKey, service)
+			nagios.AddService(nagiosConfig, service)
 		}
 	},
 }

@@ -9,8 +9,6 @@ import (
 	"net/http"
 )
 
-const basePath = "/api/v1/config"
-
 // Service represents the Nagios service object
 type Service struct {
 	CheckCommand         string   `json:"check_command"`
@@ -46,11 +44,11 @@ func (s *Service) MarshalJSON() ([]byte, error) {
 }
 
 // AddService adds a service to Nagios
-func AddService(nagiosHost, apiKey string, service Service) {
+func AddService(config Config, service Service) {
 	requestBody, _ := service.MarshalJSON()
 	requestBody, _ = AddApplyConfigToJSON(requestBody)
 
-	resp, err := http.Post("http://"+nagiosHost+basePath+"?apikey="+apiKey, "application/json", bytes.NewBuffer(requestBody))
+	resp, err := http.Post("http://"+config.Host+"/"+config.BasePath+"?apikey="+config.APIKey, "application/json", bytes.NewBuffer(requestBody))
 	if err != nil {
 		log.Fatalf("Error while making POST request to Nagios API: %s", err)
 	}
