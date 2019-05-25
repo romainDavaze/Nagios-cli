@@ -3,7 +3,6 @@ package nagios
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -56,6 +55,25 @@ func AddService(config Config, service Service) {
 	defer resp.Body.Close()
 
 	body, _ := ioutil.ReadAll(resp.Body)
+	log.Printf("Added service %s for host %s:\n %s", service.ServiceDescription, service.HostName, string(body))
+}
 
-	fmt.Println(string(body))
+// DeleteService deletes a service from Nagios
+func DeleteService(config Config, service Service) {
+	requestBody := []byte(`{"host_name": "` + service.HostName + `", "service_description": "` + service.ServiceDescription + `"}`)
+	requestBody, _ = AddApplyConfigToJSON(requestBody)
+
+	client := &http.Client{}
+
+	req, _ := http.NewRequest("DELETE", "http://"+config.Host+"/"+config.BasePath+"?apikey="+config.APIKey, bytes.NewBuffer(requestBody))
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatalf("Error while making DELETE request to Nagios API: %s", err)
+	}
+
+	defer resp.Body.Close()
+
+	body, _ := ioutil.ReadAll(resp.Body)
+
+	log.Printf("Deleted service %q for host %q: %s", service.ServiceDescription, service.HostName, string(body))
 }

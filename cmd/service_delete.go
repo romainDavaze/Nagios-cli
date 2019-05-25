@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"fmt"
+	"nagios-cli/nagios"
 
 	"github.com/spf13/cobra"
 )
@@ -11,7 +11,11 @@ var deleteCmd = &cobra.Command{
 	Short: "Delete a single or multiples Nagios service(s)",
 	Long:  "Delete a single or multiples Nagios service(s)",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("delete called")
+		services := parseServices()
+
+		for _, service := range services {
+			nagios.DeleteService(nagiosConfig, service)
+		}
 	},
 }
 
