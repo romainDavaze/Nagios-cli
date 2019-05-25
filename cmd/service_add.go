@@ -14,7 +14,7 @@ var addCmd = &cobra.Command{
 		services := parseServices()
 
 		for _, service := range services {
-			nagios.AddService("jsonplaceholder.typicode.com", "test", service)
+			nagios.AddService(nagiosHost, apiKey, service)
 		}
 	},
 }

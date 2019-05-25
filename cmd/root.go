@@ -9,11 +9,17 @@ import (
 	"github.com/spf13/viper"
 )
 
+// API key to interact with Nagios API
+var apiKey string
+
 // App configuration file
 var cfgFile string
 
 // File containing Nagios objects to parse
 var nagiosFile string
+
+// Nagios host
+var nagiosHost string
 
 var rootCmd = &cobra.Command{
 	Use:   "nagios-cli",
@@ -62,4 +68,7 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
+
+	nagiosHost = viper.GetString("nagiosHost")
+	apiKey = viper.GetString("apiKey")
 }
