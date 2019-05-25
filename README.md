@@ -2,6 +2,8 @@
 
 Command Line Interface (CLI) to interact with Nagios API.
 
+[![Build Status](https://travis-ci.com/romainDavaze/nagios-cli.svg?branch=master)](https://travis-ci.com/romainDavaze/nagios-cli)
+
 ## Configuration
 
 ### Global
