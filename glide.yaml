@@ -1,4 +1,4 @@
-package: nagios-cli
+package: github.com/romainDavaze/nagios-cli
 import:
 - package: github.com/mitchellh/go-homedir
   version: ^1.1.0
