@@ -1,23 +1,23 @@
 package cmd
 
 import (
-	"github.com/romainDavaze/nagios-cli/nagios"
+	"github.com/romainDavaze/nagiosxi-cli/nagiosxi"
 	"github.com/spf13/cobra"
 )
 
 var addHostCmd = &cobra.Command{
 	Use:   "add",
-	Short: "Add a single or multiples Nagios host(s)",
-	Long:  "Add a single or multiples Nagios host(s)",
+	Short: "Add a single or multiples NagiosXI host(s)",
+	Long:  "Add a single or multiples NagiosXI host(s)",
 	Run: func(cmd *cobra.Command, args []string) {
 		hosts := parseHosts()
 
 		for _, host := range hosts {
-			nagios.AddHost(nagiosConfig, host)
+			nagiosxi.AddHost(nagiosxiConfig, host)
 		}
 
 		if applyConfig {
-			nagios.ApplyConfig(nagiosConfig)
+			nagiosxi.ApplyConfig(nagiosxiConfig)
 		}
 	},
 }

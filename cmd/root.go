@@ -5,28 +5,28 @@ import (
 	"os"
 
 	homedir "github.com/mitchellh/go-homedir"
-	"github.com/romainDavaze/nagios-cli/nagios"
+	"github.com/romainDavaze/nagiosxi-cli/nagiosxi"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
-const basePath = "api/v1"
+const basePath = "nagiosxi/api/v1"
 
 var applyConfig bool
-var nagiosConfig nagios.Config
+var nagiosxiConfig nagiosxi.Config
 
 // App configuration file
 var cfgFile string
 
-// File containing Nagios objects to parse
-var nagiosFile string
+// File containing NagiosXI objects to parse
+var nagiosxiFile string
 
 var rootCmd = &cobra.Command{
-	Use:   "nagios-cli",
-	Short: "CLI to interact with Nagios API",
-	Long: `Command Line Interface (CLI) to interact with Nagios API.
+	Use:   "nagiosxi-cli",
+	Short: "CLI to interact with NagiosXI API",
+	Long: `Command Line Interface (CLI) to interact with NagiosXI API.
 	
-	It allow to directly manage Nagios objects from the command line`,
+	It allow to directly manage NagiosXI objects from the command line`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
@@ -43,7 +43,7 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.nagios-cli.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.nagiosxi-cli.yaml)")
 
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
@@ -60,7 +60,7 @@ func initConfig() {
 		}
 
 		viper.AddConfigPath(home)
-		viper.SetConfigName(".nagios-cli")
+		viper.SetConfigName(".nagiosxi-cli")
 	}
 
 	viper.AutomaticEnv()
@@ -69,9 +69,10 @@ func initConfig() {
 		fmt.Printf("Using config file: %s \n\n", viper.ConfigFileUsed())
 	}
 
-	nagiosConfig = nagios.Config{
+	nagiosxiConfig = nagiosxi.Config{
 		APIKey:   viper.GetString("apiKey"),
-		Host:     viper.GetString("nagiosHost"),
+		Host:     viper.GetString("nagiosxiHost"),
 		BasePath: basePath,
+		Protocol: viper.GetString("protocol"),
 	}
 }

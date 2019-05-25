@@ -1,4 +1,4 @@
-module github.com/romainDavaze/nagios-cli
+module github.com/romainDavaze/nagiosxi-cli
 
 go 1.12
 

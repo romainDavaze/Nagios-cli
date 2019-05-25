@@ -1,4 +1,4 @@
-package nagios
+package nagiosxi
 
 import (
 	"bufio"
@@ -10,11 +10,12 @@ import (
 	"strings"
 )
 
-// Config holding Nagios configuration
+// Config holding NagiosXI configuration
 type Config struct {
 	APIKey   string `yaml:"apiKey"`
 	BasePath string `yaml:"basePath"`
-	Host     string `yaml:"nagiosHost"`
+	Host     string `yaml:"nagiosxiHost"`
+	Protocol string `yaml:"protocol"`
 }
 
 // AddApplyConfigToJSON adds the applyconfig attribute to a json string
@@ -30,7 +31,7 @@ func ApplyConfig(config Config) {
 	var choice string
 	reader := bufio.NewReader(os.Stdin)
 
-	fmt.Printf("\n\nAre you sure you want to apply current Nagios configuration [y/N] ? ")
+	fmt.Printf("\n\nAre you sure you want to apply current NagiosXI configuration [y/N] ? ")
 	choice, err := reader.ReadString('\n')
 	if err != nil {
 		log.Fatal(err)
@@ -39,9 +40,9 @@ func ApplyConfig(config Config) {
 	choice = strings.ToLower(strings.TrimSpace(choice))
 
 	if choice == "y" || choice == "yes" {
-		resp, err := http.Get("http://" + config.Host + "/" + config.BasePath + "/system/applyconfig?apikey=" + config.APIKey)
+		resp, err := http.Get(config.Protocol + "://" + config.Host + "/" + config.BasePath + "/system/applyconfig?apikey=" + config.APIKey)
 		if err != nil {
-			log.Fatalf("Error while making POST request to Nagios API: %s", err)
+			log.Fatalf("Error while making POST request to NagiosXI API: %s", err)
 		}
 
 		defer resp.Body.Close()

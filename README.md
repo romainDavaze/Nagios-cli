@@ -1,22 +1,22 @@
-# Nagios-cli
+# NagiosXI CLI
 
-Command Line Interface (CLI) to interact with Nagios API.
+Command Line Interface (CLI) to interact with NagiosXI API.
 
-[![Build Status](https://travis-ci.com/romainDavaze/nagios-cli.svg?branch=master)](https://travis-ci.com/romainDavaze/nagios-cli)
+[![Build Status](https://travis-ci.com/romainDavaze/nagiosxi-cli.svg?branch=master)](https://travis-ci.com/romainDavaze/nagiosxi-cli)
 
 ## Configuration
 
 ### Global
 
-When starting, nagios-cli reads a config file and load variables from it.
+When starting, nagiosxi-cli reads a config file and load variables from it.
 
-By default, if the parameter `--config` is not specified, it looks for a `.nagios-cli.yaml` file under user's home directory.
+By default, if the parameter `--config` is not specified, it looks for a `.nagiosxi-cli.yaml` file under user's home directory.
 
-You can see an example [here](examples/nagios-cli.yaml).
+You can see an example [here](examples/nagiosxi-cli.yaml).
 
-### Nagios objects
+### NagiosXI objects
 
-You can add and delete several Nagios objects by providing a specific file as a parameter.
+You can add and delete several NagiosXI objects by providing a specific file as a parameter.
 
 As of now, these objects are supported :
 - Hosts ([example](examples/hosts.yaml))
@@ -27,7 +27,7 @@ As of now, these objects are supported :
 
 ```
 # To add services
-nagios-cli --config nagios-cli.yaml service add -f services.yaml
+nagiosxi-cli --config nagiosxi-cli.yaml service add -f services.yaml
 ```
 
 

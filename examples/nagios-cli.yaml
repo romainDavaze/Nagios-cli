@@ -1,2 +1,3 @@
-nagiosHost: jsonplaceholder.typicode.com
+nagiosxiHost: jsonplaceholder.typicode.com
+protocol: https
 apiKey: thisisanexampleapikey

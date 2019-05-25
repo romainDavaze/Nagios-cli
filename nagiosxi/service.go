@@ -1,4 +1,4 @@
-package nagios
+package nagiosxi
 
 import (
 	"bytes"
@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-// Service represents the Nagios service object
+// Service represents the NagiosXI service object
 type Service struct {
 	CheckCommand         string   `json:"check_command"`
 	CheckCommandArgs     []string `json:"-"`
@@ -43,14 +43,14 @@ func (s *Service) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// AddService adds a service to Nagios
+// AddService adds a service to NagiosXI
 func AddService(config Config, service Service) {
 	requestBody, _ := service.MarshalJSON()
 	requestBody, _ = AddApplyConfigToJSON(requestBody)
 
-	resp, err := http.Post("http://"+config.Host+"/"+config.BasePath+"/config/service?apikey="+config.APIKey, "application/json", bytes.NewBuffer(requestBody))
+	resp, err := http.Post(config.Protocol+"://"+config.Host+"/"+config.BasePath+"/config/service?apikey="+config.APIKey, "application/json", bytes.NewBuffer(requestBody))
 	if err != nil {
-		log.Fatalf("Error while making POST request to Nagios API: %s", err)
+		log.Fatalf("Error while making POST request to NagiosXI API: %s", err)
 	}
 
 	defer resp.Body.Close()
@@ -59,17 +59,17 @@ func AddService(config Config, service Service) {
 	fmt.Printf("Added service %q for host %q: %s", service.ServiceDescription, service.HostName, string(body))
 }
 
-// DeleteService deletes a service from Nagios
+// DeleteService deletes a service from NagiosXI
 func DeleteService(config Config, service Service) {
 	requestBody := []byte(`{"host_name": "` + service.HostName + `", "service_description": "` + service.ServiceDescription + `"}`)
 	requestBody, _ = AddApplyConfigToJSON(requestBody)
 
 	client := &http.Client{}
 
-	req, _ := http.NewRequest("DELETE", "http://"+config.Host+"/"+config.BasePath+"/config/service?apikey="+config.APIKey, bytes.NewBuffer(requestBody))
+	req, _ := http.NewRequest("DELETE", config.Protocol+"://"+config.Host+"/"+config.BasePath+"/config/service?apikey="+config.APIKey, bytes.NewBuffer(requestBody))
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatalf("Error while making DELETE request to Nagios API: %s", err)
+		log.Fatalf("Error while making DELETE request to NagiosXI API: %s", err)
 	}
 
 	defer resp.Body.Close()

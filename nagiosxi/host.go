@@ -1,4 +1,4 @@
-package nagios
+package nagiosxi
 
 import (
 	"bytes"
@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-// Host represents the Nagios host object
+// Host represents the NagiosXI host object
 type Host struct {
 	Address              string   `json:"address"`
 	CheckCommand         string   `json:"check_command"`
@@ -41,14 +41,14 @@ func (h *Host) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// AddHost adds a host to Nagios
+// AddHost adds a host to NagiosXI
 func AddHost(config Config, host Host) {
 	requestBody, _ := host.MarshalJSON()
 	requestBody, _ = AddApplyConfigToJSON(requestBody)
 
-	resp, err := http.Post("http://"+config.Host+"/"+config.BasePath+"/config/host?apikey="+config.APIKey, "application/json", bytes.NewBuffer(requestBody))
+	resp, err := http.Post(config.Protocol+"://"+config.Host+"/"+config.BasePath+"/config/host?apikey="+config.APIKey, "application/json", bytes.NewBuffer(requestBody))
 	if err != nil {
-		log.Fatalf("Error while making POST request to Nagios API: %s", err)
+		log.Fatalf("Error while making POST request to NagiosXI API: %s", err)
 	}
 
 	defer resp.Body.Close()
@@ -57,17 +57,17 @@ func AddHost(config Config, host Host) {
 	fmt.Printf("Added host %q: %s", host.HostName, string(body))
 }
 
-// DeleteHost deletes a hosts from Nagios
+// DeleteHost deletes a hosts from NagiosXI
 func DeleteHost(config Config, host Host) {
 	requestBody := []byte(`{"host_name": "` + host.HostName + `"}`)
 	requestBody, _ = AddApplyConfigToJSON(requestBody)
 
 	client := &http.Client{}
 
-	req, _ := http.NewRequest("DELETE", "http://"+config.Host+"/"+config.BasePath+"/config/host?apikey="+config.APIKey, bytes.NewBuffer(requestBody))
+	req, _ := http.NewRequest("DELETE", config.Protocol+"://"+config.Host+"/"+config.BasePath+"/config/host?apikey="+config.APIKey, bytes.NewBuffer(requestBody))
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatalf("Error while making DELETE request to Nagios API: %s", err)
+		log.Fatalf("Error while making DELETE request to NagiosXI API: %s", err)
 	}
 
 	defer resp.Body.Close()

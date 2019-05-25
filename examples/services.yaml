@@ -8,7 +8,7 @@ services:
     checkInterval: 5
     checkPeriod: 24x7
     contacts: # Specify either contacts or contactGroups but not both
-      - nagiosadmin
+      - nagiosxiadmin
     # contactGroups:
     #   - admins
     hostName: machineA # Mandatory

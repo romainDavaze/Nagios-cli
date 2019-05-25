@@ -1,23 +1,23 @@
 package cmd
 
 import (
-	"github.com/romainDavaze/nagios-cli/nagios"
+	"github.com/romainDavaze/nagiosxi-cli/nagiosxi"
 	"github.com/spf13/cobra"
 )
 
 var deleteHostCmd = &cobra.Command{
 	Use:   "delete",
-	Short: "Delete a single or multiples Nagios host(s)",
-	Long:  "Delete a single or multiples Nagios host(s)",
+	Short: "Delete a single or multiples NagiosXI host(s)",
+	Long:  "Delete a single or multiples NagiosXI host(s)",
 	Run: func(cmd *cobra.Command, args []string) {
 		hosts := parseHosts()
 
 		for _, host := range hosts {
-			nagios.DeleteHost(nagiosConfig, host)
+			nagiosxi.DeleteHost(nagiosxiConfig, host)
 		}
 
 		if applyConfig {
-			nagios.ApplyConfig(nagiosConfig)
+			nagiosxi.ApplyConfig(nagiosxiConfig)
 		}
 	},
 }

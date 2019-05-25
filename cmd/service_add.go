@@ -1,23 +1,23 @@
 package cmd
 
 import (
-	"github.com/romainDavaze/nagios-cli/nagios"
+	"github.com/romainDavaze/nagiosxi-cli/nagiosxi"
 	"github.com/spf13/cobra"
 )
 
 var addServiceCmd = &cobra.Command{
 	Use:   "add",
-	Short: "Add a single or multiples Nagios service(s)",
-	Long:  "Add a single or multiples Nagios service(s)",
+	Short: "Add a single or multiples NagiosXI service(s)",
+	Long:  "Add a single or multiples NagiosXI service(s)",
 	Run: func(cmd *cobra.Command, args []string) {
 		services := parseServices()
 
 		for _, service := range services {
-			nagios.AddService(nagiosConfig, service)
+			nagiosxi.AddService(nagiosxiConfig, service)
 		}
 
 		if applyConfig {
-			nagios.ApplyConfig(nagiosConfig)
+			nagiosxi.ApplyConfig(nagiosxiConfig)
 		}
 	},
 }

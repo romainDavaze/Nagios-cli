@@ -1,23 +1,23 @@
 package cmd
 
 import (
-	"github.com/romainDavaze/nagios-cli/nagios"
+	"github.com/romainDavaze/nagiosxi-cli/nagiosxi"
 	"github.com/spf13/cobra"
 )
 
 var deleteServiceCmd = &cobra.Command{
 	Use:   "delete",
-	Short: "Delete a single or multiples Nagios service(s)",
-	Long:  "Delete a single or multiples Nagios service(s)",
+	Short: "Delete a single or multiples NagiosXI service(s)",
+	Long:  "Delete a single or multiples NagiosXI service(s)",
 	Run: func(cmd *cobra.Command, args []string) {
 		services := parseServices()
 
 		for _, service := range services {
-			nagios.DeleteService(nagiosConfig, service)
+			nagiosxi.DeleteService(nagiosxiConfig, service)
 		}
 
 		if applyConfig {
-			nagios.ApplyConfig(nagiosConfig)
+			nagiosxi.ApplyConfig(nagiosxiConfig)
 		}
 	},
 }
