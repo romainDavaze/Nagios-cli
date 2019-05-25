@@ -8,12 +8,12 @@ go:
 env:
   - GO111MODULE=on
 
-before_install:
+install:
  - curl https://glide.sh/get | sh
  - glide install
 
 script:
-  - echo 'foo'
+  - go build
 
 deploy:
 - provider: script
