@@ -2,7 +2,6 @@ package nagiosxi
 
 import (
 	"bufio"
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -16,14 +15,6 @@ type Config struct {
 	BasePath string `yaml:"basePath"`
 	Host     string `yaml:"nagiosxiHost"`
 	Protocol string `yaml:"protocol"`
-}
-
-// AddApplyConfigToJSON adds the applyconfig attribute to a json string
-func AddApplyConfigToJSON(data []byte) ([]byte, error) {
-	var d map[string]interface{}
-	json.Unmarshal(data, &d)
-	d["applyconfig"] = 0
-	return json.Marshal(d)
 }
 
 // ApplyConfig applies changes made previously. It also asks for user confirmation to make sure the user wants to do it.

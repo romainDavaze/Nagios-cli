@@ -1,19 +1,20 @@
 ---
 
+# Be careful ! Every field must be a string !
 hosts:
   - address: 127.0.0.1
-    checkCommand: check_ping # Mandatory
+    checkCommand: check_ping
     checkCommandArgs:
       - 3000,80%
       - 5000,100%
     checkPeriod: 24x7
-    contacts: # Specify either contacts or contactGroups but not both
+    contacts:
       - nagiosxiadmin
-    # contactGroups: # Specify either contacts or contactGroups but not both
-    #   - admins
-    hostName: machineA # Mandatory
-    maxCheckAttempts: 2
-    notificationInterval: 5
+    contactGroups:
+      - admins
+    hostName: machineA
+    maxCheckAttempts: "2"
+    notificationInterval: "5"
     notificationPeriod: 24x7
   # - address: ...
   #   ....

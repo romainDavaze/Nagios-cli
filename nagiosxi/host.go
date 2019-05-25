@@ -1,52 +1,49 @@
 package nagiosxi
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/schema"
 )
 
 // Host represents the NagiosXI host object
 type Host struct {
-	Address              string   `json:"address"`
-	CheckCommand         string   `json:"check_command"`
-	CheckCommandArgs     []string `json:"-"`
-	CheckPeriod          string   `json:"check_period"`
-	Contacts             []string `json:"contacts"`
-	ContactGroups        []string `json:"contact_groups"`
-	HostName             string   `json:"host_name"`
-	MaxCheckAttempts     uint16   `json:"max_check_attempts"`
-	NotificationInterval uint16   `json:"notification_interval"`
-	NotificationPeriod   string   `json:"notification_period"`
+	Address              string   `schema:"address"`
+	CheckCommand         string   `schema:"check_command,omitempty"`
+	CheckCommandArgs     []string `schema:"-"`
+	CheckPeriod          string   `schema:"check_period"`
+	Contacts             []string `schema:"contacts,omitempty"`
+	ContactGroups        []string `schema:"contact_groups,omitempty"`
+	HostName             string   `schema:"host_name"`
+	MaxCheckAttempts     string   `schema:"max_check_attempts"`
+	NotificationInterval string   `schema:"notification_interval"`
+	NotificationPeriod   string   `schema:"notification_period"`
 }
 
-// MarshalJSON customizes Host object json representation
-func (h *Host) MarshalJSON() ([]byte, error) {
-	type Alias Host
-
+// Encode encodes service into a map[string][]string
+func (h *Host) Encode() (map[string][]string, error) {
 	var argsString string
+	values := make(map[string][]string)
+	encoder := schema.NewEncoder()
+
+	err := encoder.Encode(h, values)
+
 	for _, arg := range h.CheckCommandArgs {
 		argsString += "\\!" + arg
 	}
+	values["check_command"] = []string{h.CheckCommand + argsString}
 
-	return json.Marshal(&struct {
-		CheckCommand string `json:"check_command"`
-		*Alias
-	}{
-		CheckCommand: h.CheckCommand + argsString,
-		Alias:        (*Alias)(h),
-	})
+	return values, err
 }
 
 // AddHost adds a host to NagiosXI
 func AddHost(config Config, host Host) {
-	requestBody, _ := host.MarshalJSON()
-	requestBody, _ = AddApplyConfigToJSON(requestBody)
+	values, _ := host.Encode()
 
-	resp, err := http.Post(config.Protocol+"://"+config.Host+"/"+config.BasePath+"/config/host?apikey="+config.APIKey, "application/json", bytes.NewBuffer(requestBody))
+	resp, err := http.PostForm(config.Protocol+"://"+config.Host+"/"+config.BasePath+"/config/host?apikey="+config.APIKey+"&pretty=1", values)
 	if err != nil {
 		log.Fatalf("Error while making POST request to NagiosXI API: %s", err)
 	}
@@ -54,17 +51,16 @@ func AddHost(config Config, host Host) {
 	defer resp.Body.Close()
 
 	body, _ := ioutil.ReadAll(resp.Body)
-	fmt.Printf("Added host %q: %s", host.HostName, string(body))
+	fmt.Printf("Adding host %q:\n%s", host.HostName, string(body))
 }
 
 // DeleteHost deletes a hosts from NagiosXI
 func DeleteHost(config Config, host Host) {
-	requestBody := []byte(`{"host_name": "` + host.HostName + `"}`)
-	requestBody, _ = AddApplyConfigToJSON(requestBody)
-
 	client := &http.Client{}
 
-	req, _ := http.NewRequest("DELETE", config.Protocol+"://"+config.Host+"/"+config.BasePath+"/config/host?apikey="+config.APIKey, bytes.NewBuffer(requestBody))
+	fullURL := fmt.Sprintf(config.Protocol + "://" + config.Host + "/" + config.BasePath + "/config/host?apikey=" +
+		config.APIKey + "&pretty=1&host_name=" + host.HostName)
+	req, _ := http.NewRequest("DELETE", fullURL, nil)
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Fatalf("Error while making DELETE request to NagiosXI API: %s", err)
@@ -74,5 +70,5 @@ func DeleteHost(config Config, host Host) {
 
 	body, _ := ioutil.ReadAll(resp.Body)
 
-	fmt.Printf("Deleted host %q: %s", host.HostName, string(body))
+	fmt.Printf("Deleting host %q:\n%s", host.HostName, string(body))
 }

@@ -1,54 +1,52 @@
 package nagiosxi
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
+
+	"github.com/gorilla/schema"
 )
 
 // Service represents the NagiosXI service object
 type Service struct {
-	CheckCommand         string   `json:"check_command"`
-	CheckCommandArgs     []string `json:"-"`
-	CheckInterval        uint16   `json:"check_interval"`
-	CheckPeriod          string   `json:"check_period"`
-	Contacts             []string `json:"contacts"`
-	ContactGroups        []string `json:"contact_groups"`
-	HostName             string   `json:"host_name"`
-	MaxCheckAttempts     uint16   `json:"max_check_attempts"`
-	NotificationInterval uint16   `json:"notification_interval"`
-	NotificationPeriod   string   `json:"notification_period"`
-	RetryInterval        uint16   `json:"retry_interval"`
-	ServiceDescription   string   `json:"service_description"`
+	CheckCommand         string   `schema:"check_command,omitempty"`
+	CheckCommandArgs     []string `schema:"-"`
+	CheckInterval        string   `schema:"check_interval"`
+	CheckPeriod          string   `schema:"check_period"`
+	Contacts             []string `schema:"contacts,omitempty"`
+	ContactGroups        []string `schema:"contact_groups,omitempty"`
+	HostName             string   `schema:"host_name"`
+	MaxCheckAttempts     string   `schema:"max_check_attempts"`
+	NotificationInterval string   `schema:"notification_interval"`
+	NotificationPeriod   string   `schema:"notification_period"`
+	RetryInterval        string   `schema:"retry_interval"`
+	ServiceDescription   string   `schema:"service_description"`
 }
 
-// MarshalJSON customizes Service object json representation
-func (s *Service) MarshalJSON() ([]byte, error) {
-	type Alias Service
-
+// Encode encodes service into a map[string][]string
+func (s *Service) Encode() (map[string][]string, error) {
 	var argsString string
+	values := make(map[string][]string)
+	encoder := schema.NewEncoder()
+
+	err := encoder.Encode(s, values)
+
 	for _, arg := range s.CheckCommandArgs {
 		argsString += "\\!" + arg
 	}
+	values["check_command"] = []string{s.CheckCommand + argsString}
 
-	return json.Marshal(&struct {
-		CheckCommand string `json:"check_command"`
-		*Alias
-	}{
-		CheckCommand: s.CheckCommand + argsString,
-		Alias:        (*Alias)(s),
-	})
+	return values, err
 }
 
 // AddService adds a service to NagiosXI
 func AddService(config Config, service Service) {
-	requestBody, _ := service.MarshalJSON()
-	requestBody, _ = AddApplyConfigToJSON(requestBody)
+	values, _ := service.Encode()
 
-	resp, err := http.Post(config.Protocol+"://"+config.Host+"/"+config.BasePath+"/config/service?apikey="+config.APIKey, "application/json", bytes.NewBuffer(requestBody))
+	resp, err := http.PostForm(config.Protocol+"://"+config.Host+"/"+config.BasePath+"/config/service?apikey="+config.APIKey+"&pretty=1", values)
 	if err != nil {
 		log.Fatalf("Error while making POST request to NagiosXI API: %s", err)
 	}
@@ -56,17 +54,17 @@ func AddService(config Config, service Service) {
 	defer resp.Body.Close()
 
 	body, _ := ioutil.ReadAll(resp.Body)
-	fmt.Printf("Added service %q for host %q: %s", service.ServiceDescription, service.HostName, string(body))
+	fmt.Printf("Adding service %q for host %q:\n%s", service.ServiceDescription, service.HostName, string(body))
 }
 
 // DeleteService deletes a service from NagiosXI
 func DeleteService(config Config, service Service) {
-	requestBody := []byte(`{"host_name": "` + service.HostName + `", "service_description": "` + service.ServiceDescription + `"}`)
-	requestBody, _ = AddApplyConfigToJSON(requestBody)
-
 	client := &http.Client{}
 
-	req, _ := http.NewRequest("DELETE", config.Protocol+"://"+config.Host+"/"+config.BasePath+"/config/service?apikey="+config.APIKey, bytes.NewBuffer(requestBody))
+	fullURL := fmt.Sprintf(config.Protocol + "://" + config.Host + "/" + config.BasePath + "/config/service?apikey=" +
+		config.APIKey + "&pretty=1&host_name=" + service.HostName + "&service_description=" +
+		url.QueryEscape(service.ServiceDescription))
+	req, _ := http.NewRequest("DELETE", fullURL, nil)
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Fatalf("Error while making DELETE request to NagiosXI API: %s", err)
@@ -75,6 +73,5 @@ func DeleteService(config Config, service Service) {
 	defer resp.Body.Close()
 
 	body, _ := ioutil.ReadAll(resp.Body)
-
-	fmt.Printf("Deleted service %q for host %q: %s", service.ServiceDescription, service.HostName, string(body))
+	fmt.Printf("Deleting service %q for host %q:\n%s", service.ServiceDescription, service.HostName, string(body))
 }
