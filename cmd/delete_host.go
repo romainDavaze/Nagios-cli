@@ -5,7 +5,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var deleteHostCmd = &cobra.Command{
+var deleteHostsCmd = &cobra.Command{
 	Use:   "hosts",
 	Short: "Delete NagiosXI hosts",
 	Long:  "Delete NagiosXI hosts",
@@ -23,5 +23,5 @@ var deleteHostCmd = &cobra.Command{
 }
 
 func init() {
-	deleteCmd.AddCommand(deleteHostCmd)
+	deleteCmd.AddCommand(deleteHostsCmd)
 }

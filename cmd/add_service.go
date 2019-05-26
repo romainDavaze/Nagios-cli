@@ -5,7 +5,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var addServiceCmd = &cobra.Command{
+var addServicesCmd = &cobra.Command{
 	Use:   "services",
 	Short: "Add NagiosXI services",
 	Long:  "Add NagiosXI services",
@@ -23,5 +23,5 @@ var addServiceCmd = &cobra.Command{
 }
 
 func init() {
-	addCmd.AddCommand(addServiceCmd)
+	addCmd.AddCommand(addServicesCmd)
 }

@@ -5,7 +5,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var addHostCmd = &cobra.Command{
+var addHostsCmd = &cobra.Command{
 	Use:   "hosts",
 	Short: "Add NagiosXI hosts",
 	Long:  "Add NagiosXI hosts",
@@ -23,5 +23,5 @@ var addHostCmd = &cobra.Command{
 }
 
 func init() {
-	addCmd.AddCommand(addHostCmd)
+	addCmd.AddCommand(addHostsCmd)
 }
