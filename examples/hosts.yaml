@@ -3,18 +3,31 @@
 # Be careful ! Every field must be a string !
 hosts:
   - address: 127.0.0.1
+    alias: hostAlias
     checkCommand: check_ping
     checkCommandArgs:
       - 3000,80%
       - 5000,100%
+    checkInterval: "5"
     checkPeriod: 24x7
     contacts:
       - nagiosadmin
     contactGroups:
       - admins
-    hostName: machineA
+    displayName: Machine A
+    hostGroups:
+      - linux-servers
+      - windows-servers
     maxCheckAttempts: "2"
+    name: machineA
     notificationInterval: "5"
     notificationPeriod: 24x7
+    parents:
+      - localhost
+      - testapihost
+    retryInterval: "5"
+    templates:
+      - linux-server
+      - windows-server
   # - address: ...
   #   ....

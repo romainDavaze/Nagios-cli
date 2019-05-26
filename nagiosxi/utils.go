@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"reflect"
 	"strings"
 )
 
@@ -42,4 +43,28 @@ func ApplyConfig(config Config) {
 	} else {
 		fmt.Println("Not applying configuration.")
 	}
+}
+
+// EncodeStringArray encodes string array in order to be use in NagiosXI API calls
+func EncodeStringArray(v reflect.Value) string {
+	var s string
+
+	if v.Kind() == reflect.Slice {
+		for i := 0; i < v.Len(); i++ {
+			s += v.Index(i).Interface().(string) + ","
+		}
+	}
+
+	return s[:len(s)-1]
+}
+
+// EncodeStringArrayForDeletion encodes array in order to be compatible for a deletion request
+func EncodeStringArrayForDeletion(array []string, tag string) string {
+	var s string
+
+	for _, elem := range array {
+		s += "&" + tag + "[]=" + elem
+	}
+
+	return s[1:]
 }
