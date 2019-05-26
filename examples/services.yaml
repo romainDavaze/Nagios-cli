@@ -9,7 +9,7 @@ services:
     checkInterval: "5"
     checkPeriod: 24x7
     contacts: 
-      - nagiosxiadmin
+      - nagiosadmin
     contactGroups:
       - admins
     hostName: machineA

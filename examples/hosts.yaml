@@ -9,7 +9,7 @@ hosts:
       - 5000,100%
     checkPeriod: 24x7
     contacts:
-      - nagiosxiadmin
+      - nagiosadmin
     contactGroups:
       - admins
     hostName: machineA
