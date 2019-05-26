@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gorilla/schema"
 	"github.com/mitchellh/mapstructure"
 	"gopkg.in/yaml.v2"
 )
@@ -20,11 +19,12 @@ type Command struct {
 // AddCommand adds a command to NagiosXI
 func AddCommand(config Config, command Command) {
 	values := make(map[string][]string)
-	encoder := schema.NewEncoder()
 
+	encoder := InitEncoder()
 	err := encoder.Encode(command, values)
-
-	fmt.Println(values)
+	if err != nil {
+		log.Fatalf("Error while encoding command %q: %s", command.Name, err)
+	}
 
 	resp, err := http.PostForm(config.Protocol+"://"+config.Host+"/"+config.BasePath+"/config/command?apikey="+config.APIKey+"&pretty=1", values)
 	if err != nil {

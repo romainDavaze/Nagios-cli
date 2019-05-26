@@ -1,0 +1,12 @@
+---
+
+# Be careful ! Every field must be a string !
+contactgroups:
+  - alias: Contactgroup 1 
+    name: contactgroup1
+    members: 
+      - nagiosadmin
+    contactgroupMembers:
+      - xi_contactgroup_all
+      - admins
+  # - alias: ...

@@ -4,3 +4,4 @@
 commands:
   - name: testCommand
     commandLine: ping $HOSTADDRESS$
+# - name: ...

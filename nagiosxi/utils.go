@@ -8,6 +8,8 @@ import (
 	"os"
 	"reflect"
 	"strings"
+
+	"github.com/gorilla/schema"
 )
 
 // Config holding NagiosXI configuration
@@ -55,7 +57,11 @@ func EncodeStringArray(v reflect.Value) string {
 		}
 	}
 
+	if len(s) == 0 {
+		return s
+	}
 	return s[:len(s)-1]
+
 }
 
 // EncodeStringArrayForDeletion encodes array in order to be compatible for a deletion request
@@ -66,5 +72,15 @@ func EncodeStringArrayForDeletion(array []string, tag string) string {
 		s += "&" + tag + "[]=" + elem
 	}
 
+	if len(s) == 0 {
+		return s
+	}
 	return s[1:]
+}
+
+// InitEncoder initializes an encoder and configure it
+func InitEncoder() schema.Encoder {
+	Encoder := schema.NewEncoder()
+	Encoder.RegisterEncoder([]string{}, EncodeStringArray)
+	return *Encoder
 }

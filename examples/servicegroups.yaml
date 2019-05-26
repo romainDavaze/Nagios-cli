@@ -1,0 +1,14 @@
+---
+
+# Be careful ! Every field must be a string !
+servicegroups:
+  - alias: Servicegroup 1 
+    name: servicegroup1
+    # NagiosXI API does not handle service members for some reason
+    # members: 
+    #   - "H: localhost : Current Load"
+    #   - "H: localhost : Memory Usage"
+    servicegroupMembers:
+      - sg1
+      - sg2
+  # - alias: ...

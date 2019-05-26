@@ -8,7 +8,6 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/gorilla/schema"
 	"github.com/mitchellh/mapstructure"
 	"gopkg.in/yaml.v2"
 )
@@ -35,22 +34,23 @@ type Service struct {
 }
 
 // Encode encodes service into a map[string][]string
-func (s *Service) Encode() (map[string][]string, error) {
+func (service *Service) Encode() (map[string][]string, error) {
 	var argsString string
 	values := make(map[string][]string)
 
-	encoder := schema.NewEncoder()
-	encoder.RegisterEncoder([]string{}, EncodeStringArray)
+	encoder := InitEncoder()
+	err := encoder.Encode(service, values)
+	if err != nil {
+		log.Fatalf("Error while encoding service %q for hosts [%q]: %s", service.ServiceDescription, strings.Join(service.Hosts, ","), err)
+	}
 
-	err := encoder.Encode(s, values)
-
-	for _, arg := range s.CheckCommandArgs {
+	for _, arg := range service.CheckCommandArgs {
 		argsString += "\\!" + arg
 	}
-	values["check_command"] = []string{s.CheckCommand + argsString}
+	values["check_command"] = []string{service.CheckCommand + argsString}
 
 	if len(values["config_name"]) == 1 {
-		values["config_name"] = []string{strings.Join(s.Hosts, " ")}
+		values["config_name"] = []string{strings.Join(service.Hosts, " ")}
 	}
 
 	return values, err

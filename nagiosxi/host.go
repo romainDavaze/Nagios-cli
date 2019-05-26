@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gorilla/schema"
 	"github.com/mitchellh/mapstructure"
 	"gopkg.in/yaml.v2"
 )
@@ -33,19 +32,20 @@ type Host struct {
 }
 
 // Encode encodes service into a map[string][]string
-func (h *Host) Encode() (map[string][]string, error) {
+func (host *Host) Encode() (map[string][]string, error) {
 	var argsString string
 	values := make(map[string][]string)
 
-	encoder := schema.NewEncoder()
-	encoder.RegisterEncoder([]string{}, EncodeStringArray)
+	encoder := InitEncoder()
+	err := encoder.Encode(host, values)
+	if err != nil {
+		log.Fatalf("Error while encoding host %q: %s", host.Name, err)
+	}
 
-	err := encoder.Encode(h, values)
-
-	for _, arg := range h.CheckCommandArgs {
+	for _, arg := range host.CheckCommandArgs {
 		argsString += "\\!" + arg
 	}
-	values["check_command"] = []string{h.CheckCommand + argsString}
+	values["check_command"] = []string{host.CheckCommand + argsString}
 
 	return values, err
 }

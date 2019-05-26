@@ -22,7 +22,11 @@ You can add and delete several NagiosXI objects by providing a specific file as 
 
 As of now, these objects are supported :
 - Commands ([example](examples/commands.yaml))
+- Contactgroups ([example](examples/contactgroups.yaml))
+- Contacts ([example](examples/contacts.yaml))
+- Hostgroups ([example](examples/hostgroups.yaml))
 - Hosts ([example](examples/hosts.yaml))
+- Servicegroups ([example](examples/servicegroups.yaml))
 - Services ([example](examples/services.yaml))
 
 
