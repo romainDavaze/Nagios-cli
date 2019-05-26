@@ -6,11 +6,11 @@ import (
 )
 
 var addServiceCmd = &cobra.Command{
-	Use:   "add",
-	Short: "Add a single or multiples NagiosXI service(s)",
-	Long:  "Add a single or multiples NagiosXI service(s)",
+	Use:   "services",
+	Short: "Add NagiosXI services",
+	Long:  "Add NagiosXI services",
 	Run: func(cmd *cobra.Command, args []string) {
-		services := parseServices()
+		services := nagiosxi.ParseServices(objectsFile)
 
 		for _, service := range services {
 			nagiosxi.AddService(nagiosxiConfig, service)
@@ -23,5 +23,5 @@ var addServiceCmd = &cobra.Command{
 }
 
 func init() {
-	serviceCmd.AddCommand(addServiceCmd)
+	addCmd.AddCommand(addServiceCmd)
 }

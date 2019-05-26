@@ -6,11 +6,11 @@ import (
 )
 
 var addHostCmd = &cobra.Command{
-	Use:   "add",
-	Short: "Add a single or multiples NagiosXI host(s)",
-	Long:  "Add a single or multiples NagiosXI host(s)",
+	Use:   "hosts",
+	Short: "Add NagiosXI hosts",
+	Long:  "Add NagiosXI hosts",
 	Run: func(cmd *cobra.Command, args []string) {
-		hosts := parseHosts()
+		hosts := nagiosxi.ParseHosts(objectsFile)
 
 		for _, host := range hosts {
 			nagiosxi.AddHost(nagiosxiConfig, host)
@@ -23,5 +23,5 @@ var addHostCmd = &cobra.Command{
 }
 
 func init() {
-	hostCmd.AddCommand(addHostCmd)
+	addCmd.AddCommand(addHostCmd)
 }

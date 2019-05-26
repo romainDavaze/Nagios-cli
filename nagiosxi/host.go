@@ -7,6 +7,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/schema"
+	"github.com/mitchellh/mapstructure"
+	"gopkg.in/yaml.v2"
 )
 
 // Host represents the NagiosXI host object
@@ -71,4 +73,22 @@ func DeleteHost(config Config, host Host) {
 	body, _ := ioutil.ReadAll(resp.Body)
 
 	fmt.Printf("Deleting host %q:\n%s", host.HostName, string(body))
+}
+
+// ParseHosts parses NagiosXI hosts from a given yaml file
+func ParseHosts(file string) []Host {
+	var objects map[string][]map[string]interface{}
+
+	content, _ := ioutil.ReadFile(file)
+	yaml.Unmarshal(content, &objects)
+
+	obj := objects["hosts"]
+	if len(obj) == 0 {
+		log.Fatal("There is no hosts object in the given file")
+	}
+
+	var hosts []Host
+	mapstructure.Decode(obj, &hosts)
+
+	return hosts
 }

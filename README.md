@@ -27,7 +27,7 @@ As of now, these objects are supported :
 
 ```
 # To add services
-nagiosxi-cli --config nagiosxi-cli.yaml service add -f services.yaml
+nagiosxi-cli add services -f services.yaml
 ```
 
 

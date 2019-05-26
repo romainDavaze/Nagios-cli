@@ -6,11 +6,11 @@ import (
 )
 
 var deleteHostCmd = &cobra.Command{
-	Use:   "delete",
-	Short: "Delete a single or multiples NagiosXI host(s)",
-	Long:  "Delete a single or multiples NagiosXI host(s)",
+	Use:   "hosts",
+	Short: "Delete NagiosXI hosts",
+	Long:  "Delete NagiosXI hosts",
 	Run: func(cmd *cobra.Command, args []string) {
-		hosts := parseHosts()
+		hosts := nagiosxi.ParseHosts(objectsFile)
 
 		for _, host := range hosts {
 			nagiosxi.DeleteHost(nagiosxiConfig, host)
@@ -23,5 +23,5 @@ var deleteHostCmd = &cobra.Command{
 }
 
 func init() {
-	hostCmd.AddCommand(deleteHostCmd)
+	deleteCmd.AddCommand(deleteHostCmd)
 }

@@ -19,17 +19,12 @@ var nagiosxiConfig nagiosxi.Config
 var cfgFile string
 
 // File containing NagiosXI objects to parse
-var nagiosxiFile string
+var objectsFile string
 
 var rootCmd = &cobra.Command{
 	Use:   "nagiosxi-cli",
 	Short: "CLI to interact with NagiosXI API",
-	Long: `Command Line Interface (CLI) to interact with NagiosXI API.
-	
-	It allow to directly manage NagiosXI objects from the command line`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
+	Long:  `Command Line Interface (CLI) to interact with NagiosXI API`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

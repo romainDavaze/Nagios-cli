@@ -6,11 +6,11 @@ import (
 )
 
 var deleteServiceCmd = &cobra.Command{
-	Use:   "delete",
-	Short: "Delete a single or multiples NagiosXI service(s)",
-	Long:  "Delete a single or multiples NagiosXI service(s)",
+	Use:   "services",
+	Short: "Delete NagiosXI services",
+	Long:  "Delete NagiosXI services",
 	Run: func(cmd *cobra.Command, args []string) {
-		services := parseServices()
+		services := nagiosxi.ParseServices(objectsFile)
 
 		for _, service := range services {
 			nagiosxi.DeleteService(nagiosxiConfig, service)
@@ -23,5 +23,5 @@ var deleteServiceCmd = &cobra.Command{
 }
 
 func init() {
-	serviceCmd.AddCommand(deleteServiceCmd)
+	deleteCmd.AddCommand(deleteServiceCmd)
 }

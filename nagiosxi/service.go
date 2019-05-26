@@ -8,6 +8,8 @@ import (
 	"net/url"
 
 	"github.com/gorilla/schema"
+	"github.com/mitchellh/mapstructure"
+	"gopkg.in/yaml.v2"
 )
 
 // Service represents the NagiosXI service object
@@ -74,4 +76,22 @@ func DeleteService(config Config, service Service) {
 
 	body, _ := ioutil.ReadAll(resp.Body)
 	fmt.Printf("Deleting service %q for host %q:\n%s", service.ServiceDescription, service.HostName, string(body))
+}
+
+// ParseServices parses NagiosXI services from a given yaml file
+func ParseServices(file string) []Service {
+	var objects map[string][]map[string]interface{}
+
+	content, _ := ioutil.ReadFile(file)
+	yaml.Unmarshal(content, &objects)
+
+	obj := objects["services"]
+	if len(obj) == 0 {
+		log.Fatal("There is no services object in the given file")
+	}
+
+	var services []Service
+	mapstructure.Decode(obj, &services)
+
+	return services
 }
