@@ -12,14 +12,14 @@ import (
 
 // Hostgroup represents the NagiosXI hostgroup object
 type Hostgroup struct {
-	Alias            string   `schema:"alias" yaml:"alias"`
-	Members          []string `schema:"members" yaml:"members"`
-	HostgroupMembers []string `schema:"hostgroup_members" yaml:"hostgroupMembers"`
-	Name             string   `schema:"hostgroup_name" yaml:"name"`
+	Alias            string   `schema:"alias,omitempty" yaml:"alias"`
+	Members          []string `schema:"members,omitempty" yaml:"members"`
+	HostgroupMembers []string `schema:"hostgroup_members,omitempty" yaml:"hostgroupMembers"`
+	Name             string   `schema:"hostgroup_name,omitempty" yaml:"name"`
 }
 
 // AddHostgroup adds a hostgroup to NagiosXI
-func AddHostgroup(config Config, hostgroup Hostgroup) {
+func AddHostgroup(config Config, hostgroup Hostgroup, force bool) {
 	values := make(map[string][]string)
 
 	encoder := InitEncoder()

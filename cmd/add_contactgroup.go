@@ -13,7 +13,7 @@ var addContactgroupsCmd = &cobra.Command{
 		contactgroups := nagiosxi.ParseContactgroups(objectsFile)
 
 		for _, contactgroup := range contactgroups {
-			nagiosxi.AddContactgroup(nagiosxiConfig, contactgroup)
+			nagiosxi.AddContactgroup(nagiosxiConfig, contactgroup, force)
 		}
 
 		if applyConfig {

@@ -21,6 +21,9 @@ var cfgFile string
 // File containing NagiosXI objects to parse
 var objectsFile string
 
+// Forces API calls
+var force bool
+
 var rootCmd = &cobra.Command{
 	Use:   "nagiosxi-cli",
 	Short: "CLI to interact with NagiosXI API",

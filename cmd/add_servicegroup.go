@@ -13,7 +13,7 @@ var addServicegroupsCmd = &cobra.Command{
 		servicegroups := nagiosxi.ParseServicegroups(objectsFile)
 
 		for _, servicegroup := range servicegroups {
-			nagiosxi.AddServicegroup(nagiosxiConfig, servicegroup)
+			nagiosxi.AddServicegroup(nagiosxiConfig, servicegroup, force)
 		}
 
 		if applyConfig {

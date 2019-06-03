@@ -13,7 +13,7 @@ var addHostsCmd = &cobra.Command{
 		hosts := nagiosxi.ParseHosts(objectsFile)
 
 		for _, host := range hosts {
-			nagiosxi.AddHost(nagiosxiConfig, host)
+			nagiosxi.AddHost(nagiosxiConfig, host, force)
 		}
 
 		if applyConfig {

@@ -12,14 +12,14 @@ import (
 
 // Servicegroup represents the NagiosXI servicegroup object
 type Servicegroup struct {
-	Alias               string   `schema:"alias" yaml:"alias"`
-	Members             []string `schema:"members" yaml:"members"`
-	ServicegroupMembers []string `schema:"servicegroup_members" yaml:"servicegroupMembers"`
-	Name                string   `schema:"servicegroup_name" yaml:"name"`
+	Alias               string   `schema:"alias,omitempty" yaml:"alias"`
+	Members             []string `schema:"members,omitempty" yaml:"members"`
+	ServicegroupMembers []string `schema:"servicegroup_members,omitempty" yaml:"servicegroupMembers"`
+	Name                string   `schema:"servicegroup_name,omitempty" yaml:"name"`
 }
 
 // AddServicegroup adds a servicegroup to NagiosXI
-func AddServicegroup(config Config, servicegroup Servicegroup) {
+func AddServicegroup(config Config, servicegroup Servicegroup, force bool) {
 	values := make(map[string][]string)
 
 	encoder := InitEncoder()

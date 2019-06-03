@@ -14,6 +14,7 @@ func init() {
 	rootCmd.AddCommand(addCmd)
 
 	addCmd.PersistentFlags().BoolVar(&applyConfig, "applyconfig", false, "indicate whether changes should be applied or not (false by default)")
+	addCmd.PersistentFlags().BoolVar(&force, "force", false, "force API call")
 	addCmd.PersistentFlags().StringVarP(&objectsFile, "file", "f", "", "file containing NagiosXI hosts")
 	cobra.MarkFlagRequired(addCmd.PersistentFlags(), "file")
 }

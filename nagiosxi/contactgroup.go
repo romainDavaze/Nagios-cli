@@ -12,14 +12,14 @@ import (
 
 // Contactgroup represents the NagiosXI contactgroup object
 type Contactgroup struct {
-	Alias               string   `schema:"alias" yaml:"alias"`
-	Members             []string `schema:"members" yaml:"members"`
-	ContactgroupMembers []string `schema:"contactgroup_members" yaml:"contactgroupMembers"`
-	Name                string   `schema:"contactgroup_name" yaml:"name"`
+	Alias               string   `schema:"alias,omitempty" yaml:"alias"`
+	Members             []string `schema:"members,omitempty" yaml:"members"`
+	ContactgroupMembers []string `schema:"contactgroup_members,omitempty" yaml:"contactgroupMembers"`
+	Name                string   `schema:"contactgroup_name,omitempty" yaml:"name"`
 }
 
 // AddContactgroup adds a contactgroup to NagiosXI
-func AddContactgroup(config Config, contactgroup Contactgroup) {
+func AddContactgroup(config Config, contactgroup Contactgroup, force bool) {
 	values := make(map[string][]string)
 
 	encoder := InitEncoder()

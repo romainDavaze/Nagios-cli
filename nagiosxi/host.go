@@ -12,23 +12,23 @@ import (
 
 // Host represents the NagiosXI host object
 type Host struct {
-	Address              string   `schema:"address" yaml:"address"`
-	Alias                string   `schema:"alias" yaml:"alias"`
+	Address              string   `schema:"address,omitempty" yaml:"address"`
+	Alias                string   `schema:"alias,omitempty" yaml:"alias"`
 	CheckCommand         string   `schema:"check_command,omitempty" yaml:"checkCommand"`
 	CheckCommandArgs     []string `schema:"-" yaml:"checkCommandArgs"`
-	CheckInterval        string   `schema:"check_interval" yaml:"checkInterval"`
-	CheckPeriod          string   `schema:"check_period" yaml:"checkPeriod"`
+	CheckInterval        string   `schema:"check_interval,omitempty" yaml:"checkInterval"`
+	CheckPeriod          string   `schema:"check_period,omitempty" yaml:"checkPeriod"`
 	Contacts             []string `schema:"contacts,omitempty" yaml:"contacts"`
 	ContactGroups        []string `schema:"contact_groups,omitempty" yaml:"contactGroups"`
-	DisplayName          string   `schema:"display_name" yaml:"displayName"`
-	HostGroups           []string `schema:"hostgroups" yaml:"hostGroups"`
-	MaxCheckAttempts     string   `schema:"max_check_attempts" yaml:"maxCheckAttempts"`
-	Name                 string   `schema:"host_name" yaml:"name"`
-	NotificationInterval string   `schema:"notification_interval" yaml:"notificationInterval"`
-	NotificationPeriod   string   `schema:"notification_period" yaml:"notificationPeriod"`
-	Parents              []string `schema:"parents" yaml:"parents"`
-	RetryInterval        string   `schema:"retry_interval" yaml:"retryInterval"`
-	Templates            []string `schema:"use" yaml:"templates"`
+	DisplayName          string   `schema:"display_name,omitempty" yaml:"displayName"`
+	HostGroups           []string `schema:"hostgroups,omitempty" yaml:"hostGroups"`
+	MaxCheckAttempts     string   `schema:"max_check_attempts,omitempty" yaml:"maxCheckAttempts"`
+	Name                 string   `schema:"host_name,omitempty" yaml:"name"`
+	NotificationInterval string   `schema:"notification_interval,omitempty" yaml:"notificationInterval"`
+	NotificationPeriod   string   `schema:"notification_period,omitempty" yaml:"notificationPeriod"`
+	Parents              []string `schema:"parents,omitempty" yaml:"parents"`
+	RetryInterval        string   `schema:"retry_interval,omitempty" yaml:"retryInterval"`
+	Templates            []string `schema:"use,omitempty" yaml:"templates"`
 }
 
 // Encode encodes service into a map[string][]string
@@ -51,7 +51,7 @@ func (host *Host) Encode() (map[string][]string, error) {
 }
 
 // AddHost adds a host to NagiosXI
-func AddHost(config Config, host Host) {
+func AddHost(config Config, host Host, force bool) {
 	values, _ := host.Encode()
 
 	resp, err := http.PostForm(config.Protocol+"://"+config.Host+"/"+config.BasePath+"/config/host?apikey="+config.APIKey+"&pretty=1", values)

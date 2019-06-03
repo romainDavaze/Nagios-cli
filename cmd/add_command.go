@@ -13,7 +13,7 @@ var addCommandCmd = &cobra.Command{
 		commands := nagiosxi.ParseCommands(objectsFile)
 
 		for _, command := range commands {
-			nagiosxi.AddCommand(nagiosxiConfig, command)
+			nagiosxi.AddCommand(nagiosxiConfig, command, force)
 		}
 
 		if applyConfig {

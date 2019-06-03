@@ -12,24 +12,24 @@ import (
 
 // Contact represents the NagiosXI contact object
 type Contact struct {
-	Alias                       string   `schema:"alias" yaml:"alias"`
-	ContactGroups               []string `schema:"contactgroups" yaml:"contactgroups"`
-	Email                       string   `schema:"email" yaml:"email"`
-	HostNotificationsEnabled    string   `schema:"host_notifications_enabled" yaml:"hostNotificationsEnabled"`
-	HostNotificationsOptions    []string `schema:"host_notification_options" yaml:"hostNotificationsOptions"`
-	HostNotificationCommands    []string `schema:"host_notification_commands" yaml:"hostNotificationCommands"`
-	HostNotificationsPeriod     string   `schema:"host_notification_period" yaml:"hostNotificationsPeriod"`
-	Members                     []string `schema:"members" yaml:"members"`
-	Name                        string   `schema:"contact_name" yaml:"name"`
-	ServiceNotificationsEnabled string   `schema:"service_notifications_enabled" yaml:"serviceNotificationsEnabled"`
-	ServiceNotificationsOptions []string `schema:"service_notification_options" yaml:"serviceNotificationsOptions"`
-	ServiceNotificationCommands []string `schema:"service_notification_commands" yaml:"serviceNotificationCommands"`
-	ServiceNotificationsPeriod  string   `schema:"service_notification_period" yaml:"serviceNotificationsPeriod"`
-	Templates                   []string `schema:"use" yaml:"templates"`
+	Alias                       string   `schema:"alias,omitempty" yaml:"alias"`
+	ContactGroups               []string `schema:"contactgroups,omitempty" yaml:"contactgroups"`
+	Email                       string   `schema:"email,omitempty" yaml:"email"`
+	HostNotificationsEnabled    string   `schema:"host_notifications_enabled,omitempty" yaml:"hostNotificationsEnabled"`
+	HostNotificationsOptions    []string `schema:"host_notification_options,omitempty" yaml:"hostNotificationsOptions"`
+	HostNotificationCommands    []string `schema:"host_notification_commands,omitempty" yaml:"hostNotificationCommands"`
+	HostNotificationsPeriod     string   `schema:"host_notification_period,omitempty" yaml:"hostNotificationsPeriod"`
+	Members                     []string `schema:"members,omitempty" yaml:"members"`
+	Name                        string   `schema:"contact_name,omitempty" yaml:"name"`
+	ServiceNotificationsEnabled string   `schema:"service_notifications_enabled,omitempty" yaml:"serviceNotificationsEnabled"`
+	ServiceNotificationsOptions []string `schema:"service_notification_options,omitempty" yaml:"serviceNotificationsOptions"`
+	ServiceNotificationCommands []string `schema:"service_notification_commands,omitempty" yaml:"serviceNotificationCommands"`
+	ServiceNotificationsPeriod  string   `schema:"service_notification_period,omitempty" yaml:"serviceNotificationsPeriod"`
+	Templates                   []string `schema:"use,omitempty" yaml:"templates"`
 }
 
 // AddContact adds a contact to NagiosXI
-func AddContact(config Config, contact Contact) {
+func AddContact(config Config, contact Contact, force bool) {
 	values := make(map[string][]string)
 
 	encoder := InitEncoder()

@@ -47,6 +47,14 @@ func ApplyConfig(config Config) {
 	}
 }
 
+// BoolToStr converts boolean to string
+func BoolToStr(b bool) string {
+	if b {
+		return "1"
+	}
+	return "0"
+}
+
 // EncodeStringArray encodes string array in order to be use in NagiosXI API calls
 func EncodeStringArray(v reflect.Value) string {
 	var s string

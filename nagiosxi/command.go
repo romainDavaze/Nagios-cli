@@ -12,12 +12,12 @@ import (
 
 // Command represents the NagiosXI command object
 type Command struct {
-	Name        string `schema:"command_name" yaml:"name"`
-	CommandLine string `schema:"command_line" yaml:"commandLine"`
+	Name        string `schema:"command_name,omitempty" yaml:"name"`
+	CommandLine string `schema:"command_line,omitempty" yaml:"commandLine"`
 }
 
 // AddCommand adds a command to NagiosXI
-func AddCommand(config Config, command Command) {
+func AddCommand(config Config, command Command, force bool) {
 	values := make(map[string][]string)
 
 	encoder := InitEncoder()

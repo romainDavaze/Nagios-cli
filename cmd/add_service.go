@@ -13,7 +13,7 @@ var addServicesCmd = &cobra.Command{
 		services := nagiosxi.ParseServices(objectsFile)
 
 		for _, service := range services {
-			nagiosxi.AddService(nagiosxiConfig, service)
+			nagiosxi.AddService(nagiosxiConfig, service, force)
 		}
 
 		if applyConfig {

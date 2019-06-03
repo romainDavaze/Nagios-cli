@@ -13,7 +13,7 @@ var addContactsCmd = &cobra.Command{
 		contacts := nagiosxi.ParseContacts(objectsFile)
 
 		for _, contact := range contacts {
-			nagiosxi.AddContact(nagiosxiConfig, contact)
+			nagiosxi.AddContact(nagiosxiConfig, contact, force)
 		}
 
 		if applyConfig {
