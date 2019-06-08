@@ -6,9 +6,10 @@ import (
 )
 
 var deleteHostgroupsCmd = &cobra.Command{
-	Use:   "hostgroups",
+	Use:   "hostgroups <file>",
 	Short: "Delete NagiosXI hostgroups",
 	Long:  "Delete NagiosXI hostgroups",
+	Args:  validateArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		hostgroups := nagiosxi.ParseHostgroups(objectsFile)
 

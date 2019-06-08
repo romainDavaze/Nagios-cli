@@ -6,9 +6,10 @@ import (
 )
 
 var deleteContactsCmd = &cobra.Command{
-	Use:   "contacts",
+	Use:   "contacts <file>",
 	Short: "Delete NagiosXI contacts",
 	Long:  "Delete NagiosXI contacts",
+	Args:  validateArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		contacts := nagiosxi.ParseContacts(objectsFile)
 

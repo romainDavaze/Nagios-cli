@@ -33,10 +33,7 @@ As of now, these objects are supported :
 
 ## Usage
 
-```
-# To add services
-nagiosxi-cli add services -f services.yaml
-```
+Please refer to the [commands documentation](docs/nagiosxi-cli.md)
 
 
 ## Author

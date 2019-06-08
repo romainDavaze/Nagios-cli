@@ -6,9 +6,10 @@ import (
 )
 
 var addContactsCmd = &cobra.Command{
-	Use:   "contacts",
+	Use:   "contacts <file>",
 	Short: "Add NagiosXI contacts",
 	Long:  "Add NagiosXI contacts",
+	Args:  validateArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		contacts := nagiosxi.ParseContacts(objectsFile)
 

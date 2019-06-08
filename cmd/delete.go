@@ -14,6 +14,4 @@ func init() {
 	rootCmd.AddCommand(deleteCmd)
 
 	deleteCmd.PersistentFlags().BoolVar(&applyConfig, "applyconfig", false, "indicate whether changes should be applied or not (false by default)")
-	deleteCmd.PersistentFlags().StringVarP(&objectsFile, "file", "f", "", "file containing services to add")
-	cobra.MarkFlagRequired(deleteCmd.PersistentFlags(), "file")
 }

@@ -6,9 +6,10 @@ import (
 )
 
 var addHostgroupsCmd = &cobra.Command{
-	Use:   "hostgroups",
+	Use:   "hostgroups <file>",
 	Short: "Add NagiosXI hostgroups",
 	Long:  "Add NagiosXI hostgroups",
+	Args:  validateArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		hostgroups := nagiosxi.ParseHostgroups(objectsFile)
 

@@ -6,9 +6,10 @@ import (
 )
 
 var deleteServicegroupsCmd = &cobra.Command{
-	Use:   "servicegroups",
+	Use:   "servicegroups <file>",
 	Short: "Delete NagiosXI servicegroups",
 	Long:  "Delete NagiosXI servicegroups",
+	Args:  validateArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		servicegroups := nagiosxi.ParseServicegroups(objectsFile)
 

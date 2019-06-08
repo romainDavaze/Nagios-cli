@@ -6,9 +6,10 @@ import (
 )
 
 var addCommandCmd = &cobra.Command{
-	Use:   "commands",
+	Use:   "commands <file>",
 	Short: "Add NagiosXI commands",
 	Long:  "Add NagiosXI commands",
+	Args:  validateArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		commands := nagiosxi.ParseCommands(objectsFile)
 

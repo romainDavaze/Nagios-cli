@@ -6,9 +6,10 @@ import (
 )
 
 var addContactgroupsCmd = &cobra.Command{
-	Use:   "contactgroups",
+	Use:   "contactgroups <file>",
 	Short: "Add NagiosXI contactgroups",
 	Long:  "Add NagiosXI contactgroups",
+	Args:  validateArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		contactgroups := nagiosxi.ParseContactgroups(objectsFile)
 

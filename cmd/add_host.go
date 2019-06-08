@@ -6,9 +6,10 @@ import (
 )
 
 var addHostsCmd = &cobra.Command{
-	Use:   "hosts",
+	Use:   "hosts <file>",
 	Short: "Add NagiosXI hosts",
 	Long:  "Add NagiosXI hosts",
+	Args:  validateArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		hosts := nagiosxi.ParseHosts(objectsFile)
 

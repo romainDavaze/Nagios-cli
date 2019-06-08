@@ -6,9 +6,10 @@ import (
 )
 
 var addServicesCmd = &cobra.Command{
-	Use:   "services",
+	Use:   "services <file>",
 	Short: "Add NagiosXI services",
 	Long:  "Add NagiosXI services",
+	Args:  validateArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		services := nagiosxi.ParseServices(objectsFile)
 

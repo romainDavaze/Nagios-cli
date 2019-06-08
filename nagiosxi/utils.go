@@ -92,3 +92,14 @@ func InitEncoder() schema.Encoder {
 	Encoder.RegisterEncoder([]string{}, EncodeStringArray)
 	return *Encoder
 }
+
+// IsExtensionValid indicates if the given filename has a valid extension
+func IsExtensionValid(file string, validExtensions []string) bool {
+	extension := file[strings.LastIndex(file, ".")+1:]
+	for _, ext := range validExtensions {
+		if extension == ext {
+			return true
+		}
+	}
+	return false
+}
