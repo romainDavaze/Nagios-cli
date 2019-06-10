@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"log"
+
 	"github.com/romainDavaze/nagiosxi-cli/nagiosxi"
 	"github.com/spf13/cobra"
 )
@@ -11,14 +13,23 @@ var deleteServicegroupsCmd = &cobra.Command{
 	Long:  "Delete NagiosXI servicegroups",
 	Args:  validateArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		servicegroups := nagiosxi.ParseServicegroups(objectsFile)
+		servicegroups, err := nagiosxi.ParseServicegroups(args[0])
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		for _, servicegroup := range servicegroups {
-			nagiosxi.DeleteServicegroup(nagiosxiConfig, servicegroup)
+			err := nagiosxi.DeleteServicegroup(nagiosxiConfig, servicegroup)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 
 		if applyConfig {
-			nagiosxi.ApplyConfig(nagiosxiConfig)
+			err := nagiosxi.ApplyConfig(nagiosxiConfig)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 	},
 }

@@ -6,6 +6,11 @@ go:
 env:
   - GO111MODULE=on
 
+services:
+  - docker
+
+script: make test
+
 deploy:
 - provider: script
   skip_cleanup: true

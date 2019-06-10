@@ -1,0 +1,31 @@
+---
+
+contacts:
+  - alias: Contact 1
+    contactgroups: 
+      - xi_contactgroup_all 
+      - admins
+    email: root@localhost
+    hostNotificationCommands:
+      - notify-host-by-email
+    hostNotificationOptions: d,u
+    hostNotificationPeriod: 24x7
+    hostNotificationsEnabled: "1"
+    name: contact1
+    serviceNotificationCommands:
+      - notify-host-by-email
+    serviceNotificationOptions: c,w
+    serviceNotificationPeriod: 24x7
+    serviceNotificationsEnabled: "0"
+  - alias: Contact 2
+    hostNotificationCommands:
+      - notify-host-by-email
+    hostNotificationOptions: f,s
+    hostNotificationPeriod: 24x7
+    hostNotificationsEnabled: "0"
+    name: contact2
+    serviceNotificationCommands:
+      - notify-host-by-email
+    serviceNotificationOptions: r,s
+    serviceNotificationPeriod: 24x7
+    serviceNotificationsEnabled: "1"

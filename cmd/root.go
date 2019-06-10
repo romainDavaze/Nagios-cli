@@ -20,7 +20,6 @@ var applyConfig bool
 var cfgFile string
 var force bool
 var nagiosxiConfig nagiosxi.Config
-var objectsFile string
 var validExtensions = []string{"yaml", "yml"}
 
 var rootCmd = &cobra.Command{
@@ -73,8 +72,9 @@ func initConfig() {
 
 	nagiosxiConfig = nagiosxi.Config{
 		APIKey:   viper.GetString("apiKey"),
-		Host:     viper.GetString("nagiosxiHost"),
+		Host:     viper.GetString("host"),
 		BasePath: basePath,
+		Port:     uint16(viper.GetInt("port")),
 		Protocol: viper.GetString("protocol"),
 	}
 }

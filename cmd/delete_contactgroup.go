@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"log"
+
 	"github.com/romainDavaze/nagiosxi-cli/nagiosxi"
 	"github.com/spf13/cobra"
 )
@@ -11,14 +13,23 @@ var deleteContactgroupsCmd = &cobra.Command{
 	Long:  "Delete NagiosXI contactgroups",
 	Args:  validateArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		contactgroups := nagiosxi.ParseContactgroups(objectsFile)
+		contactgroups, err := nagiosxi.ParseContactgroups(args[0])
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		for _, contactgroup := range contactgroups {
-			nagiosxi.DeleteContactgroup(nagiosxiConfig, contactgroup)
+			err := nagiosxi.DeleteContactgroup(nagiosxiConfig, contactgroup)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 
 		if applyConfig {
-			nagiosxi.ApplyConfig(nagiosxiConfig)
+			err := nagiosxi.ApplyConfig(nagiosxiConfig)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 	},
 }

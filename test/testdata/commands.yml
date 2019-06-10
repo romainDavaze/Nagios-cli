@@ -1,0 +1,7 @@
+---
+
+commands:
+  - name: testCommand
+    commandLine: ping test
+  - name: testCommand2
+    commandLine: ping test2

@@ -1,0 +1,9 @@
+---
+
+servicegroups:
+  - alias: Servicegroup 1 
+    name: servicegroup1
+  - alias: Servicegroup 2
+    name: servicegroup2
+    servicegroupMembers:
+      - servicegroup1

@@ -1,11 +1,13 @@
 package nagiosxi
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 
 	"github.com/mitchellh/mapstructure"
@@ -14,23 +16,23 @@ import (
 
 // Service represents the NagiosXI service object
 type Service struct {
-	CheckCommand         string   `schema:"check_command,omitempty" yaml:"checkCommand"`
-	CheckCommandArgs     []string `schema:"-" yaml:"checkCommandArgs"`
-	CheckInterval        string   `schema:"check_interval,omitempty" yaml:"checkInterval"`
-	CheckPeriod          string   `schema:"check_period,omitempty" yaml:"checkPeriod"`
-	ConfigName           string   `schema:"config_name,omitempty" yaml:"configName"`
-	Contacts             []string `schema:"contacts,omitempty" yaml:"contacts"`
-	ContactGroups        []string `schema:"contact_groups,omitempty" yaml:"contactGroups"`
-	DisplayName          string   `schema:"display_name,omitempty" yaml:"displayName"`
-	Hosts                []string `schema:"host_name,omitempty" yaml:"hosts"`
-	HostGroups           []string `schema:"hostgroup_name,omitempty" yaml:"hostGroups"`
-	MaxCheckAttempts     string   `schema:"max_check_attempts,omitempty" yaml:"maxCheckAttempts"`
-	NotificationInterval string   `schema:"notification_interval,omitempty" yaml:"notificationInterval"`
-	NotificationPeriod   string   `schema:"notification_period,omitempty" yaml:"notificationPeriod"`
-	RetryInterval        string   `schema:"retry_interval,omitempty" yaml:"retryInterval"`
-	ServiceDescription   string   `schema:"service_description,omitempty" yaml:"serviceDescription"`
-	ServiceGroups        []string `schema:"servicegroups,omitempty" yaml:"serviceGroups"`
-	Templates            []string `schema:"use,omitempty" yaml:"templates"`
+	CheckCommand         string   `json:"check_command" schema:"check_command,omitempty" yaml:"checkCommand"`
+	CheckCommandArgs     []string `json:"-" schema:"-" yaml:"checkCommandArgs"`
+	CheckInterval        string   `json:"check_interval" schema:"check_interval,omitempty" yaml:"checkInterval"`
+	CheckPeriod          string   `json:"check_period" schema:"check_period,omitempty" yaml:"checkPeriod"`
+	ConfigName           string   `json:"config_name" schema:"config_name,omitempty" yaml:"configName"`
+	Contacts             []string `json:"Services" schema:"Services,omitempty" yaml:"Services"`
+	ContactGroups        []string `json:"Service_groups" schema:"Service_groups,omitempty" yaml:"ServiceGroups"`
+	DisplayName          string   `json:"display_name" schema:"display_name,omitempty" yaml:"displayName"`
+	Hosts                []string `json:"host_name" schema:"host_name,omitempty" yaml:"hosts"`
+	HostGroups           []string `json:"hostgroup_name" schema:"hostgroup_name,omitempty" yaml:"hostGroups"`
+	MaxCheckAttempts     string   `json:"max_check_attempts" schema:"max_check_attempts,omitempty" yaml:"maxCheckAttempts"`
+	NotificationInterval string   `json:"notification_interval" schema:"notification_interval,omitempty" yaml:"notificationInterval"`
+	NotificationPeriod   string   `json:"notification_period" schema:"notification_period,omitempty" yaml:"notificationPeriod"`
+	RetryInterval        string   `json:"retry_interval" schema:"retry_interval,omitempty" yaml:"retryInterval"`
+	ServiceDescription   string   `json:"service_description" schema:"service_description,omitempty" yaml:"serviceDescription"`
+	ServiceGroups        []string `json:"servicegroups" schema:"servicegroups,omitempty" yaml:"serviceGroups"`
+	Templates            []string `json:"use" schema:"use,omitempty" yaml:"templates"`
 }
 
 // Encode encodes service into a map[string][]string
@@ -59,55 +61,86 @@ func (service *Service) Encode(force bool) (map[string][]string, error) {
 }
 
 // AddService adds a service to NagiosXI
-func AddService(config Config, service Service, force bool) {
+func AddService(config Config, service Service, force bool) error {
 	values, _ := service.Encode(force)
 
 	fmt.Println(values)
 
-	resp, err := http.PostForm(config.Protocol+"://"+config.Host+"/"+config.BasePath+"/config/service?apikey="+config.APIKey+"&pretty=1", values)
+	resp, err := http.PostForm(config.Protocol+"://"+config.Host+":"+strconv.Itoa(int(config.Port))+"/"+config.BasePath+"/config/service?apikey="+config.APIKey+"&pretty=1", values)
 	if err != nil {
-		log.Fatalf("Error while making POST request to NagiosXI API: %s", err)
+		return fmt.Errorf("Error while making POST request to NagiosXI API: %s", err)
 	}
 
 	defer resp.Body.Close()
 
 	body, _ := ioutil.ReadAll(resp.Body)
 	fmt.Printf("Adding service %q for host(s) [%s]:\n%s", service.ServiceDescription, strings.Join(service.Hosts, ","), string(body))
+
+	return nil
 }
 
 // DeleteService deletes a service from NagiosXI
-func DeleteService(config Config, service Service) {
+func DeleteService(config Config, service Service) error {
 	client := &http.Client{}
 
-	fullURL := fmt.Sprintf(config.Protocol + "://" + config.Host + "/" + config.BasePath + "/config/service?apikey=" +
+	fullURL := fmt.Sprintf(config.Protocol + "://" + config.Host + ":" + strconv.Itoa(int(config.Port)) + "/" + config.BasePath + "/config/service?apikey=" +
 		config.APIKey + "&pretty=1&" + EncodeStringArrayForDeletion(service.Hosts, "host_name") + "&service_description=" +
 		url.QueryEscape(service.ServiceDescription))
 	req, _ := http.NewRequest("DELETE", fullURL, nil)
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatalf("Error while making DELETE request to NagiosXI API: %s", err)
+		return fmt.Errorf("Error while making DELETE request to NagiosXI API: %s", err)
 	}
 
 	defer resp.Body.Close()
 
 	body, _ := ioutil.ReadAll(resp.Body)
 	fmt.Printf("Deleting service %q for host(s) [%s]:\n%s", service.ServiceDescription, strings.Join(service.Hosts, ","), string(body))
+
+	return nil
+}
+
+// GetService retrives a service from NagiosXI
+func GetService(config Config, ServiceName string) (Service, error) {
+	services := []Service{}
+
+	fullURL := fmt.Sprintf(config.Protocol + "://" + config.Host + ":" + strconv.Itoa(int(config.Port)) + "/" + config.BasePath + "/config/service?apikey=" +
+		config.APIKey + "&pretty=1&service_name=" + ServiceName)
+	resp, err := http.Get(fullURL)
+	if err != nil {
+		return Service{}, fmt.Errorf("Error while retrieving %s service from NagiosXI: %s", ServiceName, err)
+	}
+
+	defer resp.Body.Close()
+
+	body, _ := ioutil.ReadAll(resp.Body)
+
+	err = json.Unmarshal(body, &services)
+	if err != nil {
+		return Service{}, fmt.Errorf("Error while unmarshalling %s service from NagiosXI: %s", ServiceName, err)
+	}
+
+	if len(services) == 0 {
+		return Service{}, fmt.Errorf("Could not retrieve service %s from NagiosXI", ServiceName)
+	}
+
+	return services[0], nil
 }
 
 // ParseServices parses NagiosXI services from a given yaml file
-func ParseServices(file string) []Service {
+func ParseServices(file string) ([]Service, error) {
 	var objects map[string][]map[string]interface{}
+	services := []Service{}
 
 	content, _ := ioutil.ReadFile(file)
 	yaml.Unmarshal(content, &objects)
 
 	obj := objects["services"]
 	if len(obj) == 0 {
-		log.Fatal("There is no services object in the given file")
+		return services, fmt.Errorf("There is no services object in the given file")
 	}
 
-	var services []Service
 	mapstructure.Decode(obj, &services)
 
-	return services
+	return services, nil
 }

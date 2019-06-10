@@ -1,0 +1,34 @@
+---
+
+services:
+  - checkCommand: check_ping
+    checkCommandArgs:
+      - 3000,80%
+      - 5000,100%
+    checkInterval: "5"
+    checkPeriod: 24x7
+    configName: Ping service
+    contacts: 
+      - nagiosadmin
+    contactGroups:
+      - admins
+      - xi_contactgroup_all
+    displayName: Ping Service
+    hostGroups:
+      - linux-servers
+    hosts:
+      - localhost
+    maxCheckAttempts: "2"
+    notificationInterval: "5"
+    notificationPeriod: 24x7
+    retryInterval: "5"
+    serviceDescription: This is a ping service
+    templates:
+      - local-service
+      - generic-service
+  - checkCommand: check_none
+    hostGroups:
+      - windows-servers
+    hosts:
+      - localhost
+    serviceDescription: This is a check_none service

@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"log"
+
 	"github.com/romainDavaze/nagiosxi-cli/nagiosxi"
 	"github.com/spf13/cobra"
 )
@@ -11,14 +13,23 @@ var deleteHostgroupsCmd = &cobra.Command{
 	Long:  "Delete NagiosXI hostgroups",
 	Args:  validateArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		hostgroups := nagiosxi.ParseHostgroups(objectsFile)
+		hostgroups, err := nagiosxi.ParseHostgroups(args[0])
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		for _, hostgroup := range hostgroups {
-			nagiosxi.DeleteHostgroup(nagiosxiConfig, hostgroup)
+			err := nagiosxi.DeleteHostgroup(nagiosxiConfig, hostgroup)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 
 		if applyConfig {
-			nagiosxi.ApplyConfig(nagiosxiConfig)
+			err := nagiosxi.ApplyConfig(nagiosxiConfig)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 	},
 }

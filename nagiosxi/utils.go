@@ -3,7 +3,6 @@ package nagiosxi
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"reflect"
@@ -16,19 +15,20 @@ import (
 type Config struct {
 	APIKey   string `yaml:"apiKey"`
 	BasePath string `yaml:"basePath"`
-	Host     string `yaml:"nagiosxiHost"`
+	Host     string `yaml:"host"`
+	Port     uint16 `yaml:"port"`
 	Protocol string `yaml:"protocol"`
 }
 
 // ApplyConfig applies changes made previously. It also asks for user confirmation to make sure the user wants to do it.
-func ApplyConfig(config Config) {
+func ApplyConfig(config Config) error {
 	var choice string
 	reader := bufio.NewReader(os.Stdin)
 
 	fmt.Printf("\n\nAre you sure you want to apply current NagiosXI configuration [y/N] ? ")
 	choice, err := reader.ReadString('\n')
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf(err.Error())
 	}
 
 	choice = strings.ToLower(strings.TrimSpace(choice))
@@ -36,7 +36,7 @@ func ApplyConfig(config Config) {
 	if choice == "y" || choice == "yes" {
 		resp, err := http.Get(config.Protocol + "://" + config.Host + "/" + config.BasePath + "/system/applyconfig?apikey=" + config.APIKey)
 		if err != nil {
-			log.Fatalf("Error while making POST request to NagiosXI API: %s", err)
+			return fmt.Errorf("Error while making POST request to NagiosXI API: %s", err)
 		}
 
 		defer resp.Body.Close()
@@ -45,6 +45,8 @@ func ApplyConfig(config Config) {
 	} else {
 		fmt.Println("Not applying configuration.")
 	}
+
+	return nil
 }
 
 // BoolToStr converts boolean to string

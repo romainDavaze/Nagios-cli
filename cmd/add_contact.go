@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"log"
+
 	"github.com/romainDavaze/nagiosxi-cli/nagiosxi"
 	"github.com/spf13/cobra"
 )
@@ -11,14 +13,23 @@ var addContactsCmd = &cobra.Command{
 	Long:  "Add NagiosXI contacts",
 	Args:  validateArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		contacts := nagiosxi.ParseContacts(objectsFile)
+		contacts, err := nagiosxi.ParseContacts(args[0])
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		for _, contact := range contacts {
-			nagiosxi.AddContact(nagiosxiConfig, contact, force)
+			err := nagiosxi.AddContact(nagiosxiConfig, contact, force)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 
 		if applyConfig {
-			nagiosxi.ApplyConfig(nagiosxiConfig)
+			err := nagiosxi.ApplyConfig(nagiosxiConfig)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 	},
 }

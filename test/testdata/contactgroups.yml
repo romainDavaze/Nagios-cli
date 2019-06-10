@@ -1,0 +1,14 @@
+---
+
+contactgroups:
+  - alias: Contactgroup 1 
+    name: contactgroup1
+    members: 
+      - nagiosadmin
+    contactgroupMembers:
+      - xi_contactgroup_all
+      - admins
+  - alias: Contactgroup 2
+    name: contactgroup2
+    members: 
+      - nagiosadmin

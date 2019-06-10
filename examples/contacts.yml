@@ -1,0 +1,24 @@
+---
+
+# Be careful ! Every field must be a string !
+contacts:
+  - alias: Contact 1
+    contactgroups: 
+      - xi_contactgroup_all 
+      - admins
+    email: root@localhost
+    hostNotificationCommands:
+      - notify-host-by-email
+    hostNotificationOptions: d,u # d => Down, u => Unreachable, r => Up, f => Flapping, s => Scheduled Downtime, n => None
+    hostNotificationPeriod: 24x7
+    hostNotificationsEnabled: "1" # 0 for off or 1 for on
+    name: contact1
+    serviceNotificationCommands:
+      - notify-host-by-email
+    serviceNotificationOptions: c,w # w => Warning, u => Unknown, c => Critical, r => On, f => Flapping, s => Scheduled Downtime, n => None
+    serviceNotificationPeriod: 24x7
+    serviceNotificationsEnabled: "0" # 0 for off or 1 for on
+    # NagiosXI API does not handle contact templates for some reason
+    # templates:
+    #   - xi_contact_generic
+  # - alias: ...

@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"log"
+
 	"github.com/romainDavaze/nagiosxi-cli/nagiosxi"
 	"github.com/spf13/cobra"
 )
@@ -11,14 +13,23 @@ var addServicesCmd = &cobra.Command{
 	Long:  "Add NagiosXI services",
 	Args:  validateArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		services := nagiosxi.ParseServices(objectsFile)
+		services, err := nagiosxi.ParseServices(args[0])
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		for _, service := range services {
-			nagiosxi.AddService(nagiosxiConfig, service, force)
+			err := nagiosxi.AddService(nagiosxiConfig, service, force)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 
 		if applyConfig {
-			nagiosxi.ApplyConfig(nagiosxiConfig)
+			err := nagiosxi.ApplyConfig(nagiosxiConfig)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 	},
 }

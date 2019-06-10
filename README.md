@@ -10,8 +10,8 @@ Command Line Interface (CLI) to interact with NagiosXI API.
 
 When starting, nagiosxi-cli reads a config file and load variables from it.
 
-By default, if the parameter `--config` is not specified, it looks for a `.nagiosxi-cli.yaml` file under user's home directory.
-You can see an example [here](examples/nagiosxi-cli.yaml).
+By default, if the parameter `--config` is not specified, it looks for a `.nagiosxi-cli.yml` file under user's home directory.
+You can see an example [here](examples/nagiosxi-cli.yml).
 
 **The API token must belong to a NagiosXI admin.**
 
@@ -21,13 +21,13 @@ You can see an example [here](examples/nagiosxi-cli.yaml).
 You can add and delete several NagiosXI objects by providing a specific file as a parameter.
 
 As of now, these objects are supported :
-- Commands ([example](examples/commands.yaml))
-- Contactgroups ([example](examples/contactgroups.yaml))
-- Contacts ([example](examples/contacts.yaml))
-- Hostgroups ([example](examples/hostgroups.yaml))
-- Hosts ([example](examples/hosts.yaml))
-- Servicegroups ([example](examples/servicegroups.yaml))
-- Services ([example](examples/services.yaml))
+- Commands ([example](examples/commands.yml))
+- Contactgroups ([example](examples/contactgroups.yml))
+- Contacts ([example](examples/contacts.yml))
+- Hostgroups ([example](examples/hostgroups.yml))
+- Hosts ([example](examples/hosts.yml))
+- Servicegroups ([example](examples/servicegroups.yml))
+- Services ([example](examples/services.yml))
 
 
 

@@ -1,3 +1,4 @@
-nagiosxiHost: jsonplaceholder.typicode.com
+host: jsonplaceholder.typicode.com
+port: 80
 protocol: https
 apiKey: thisisanexampleapikey

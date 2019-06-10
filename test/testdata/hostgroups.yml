@@ -1,0 +1,14 @@
+---
+
+# Be careful ! Every field must be a string !
+hostgroups:
+  - alias: Hostgroup 1 
+    hostgroupMembers:
+      - linux-servers
+    members:
+      - localhost
+    name: hostgroup1
+  - alias: Hostgroup 2
+    members:
+      - localhost
+    name: hostgroup2
