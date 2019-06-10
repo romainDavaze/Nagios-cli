@@ -7,7 +7,7 @@ import (
 )
 
 func TestGetContactgroup(t *testing.T) {
-	c := "admins"
+	cg := "admins"
 
 	config := Config{
 		APIKey:   os.Getenv("API_KEY"),
@@ -17,19 +17,19 @@ func TestGetContactgroup(t *testing.T) {
 		Protocol: "http",
 	}
 
-	contactgroup, err := GetContactgroup(config, c)
+	contactgroup, err := GetContactgroup(config, cg)
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if contactgroup.Name != c {
+	if contactgroup.Name != cg {
 		t.Error("Mismatch between requested contactgroup and NagiosXI's response")
 	}
 }
 
 func TestAddContactgroup(t *testing.T) {
-	c := Contactgroup{
+	cg := Contactgroup{
 		Alias:               "Test contactgroup",
 		Name:                "testcontactgroup",
 		Members:             []string{"nagiosadmin"},
@@ -44,24 +44,24 @@ func TestAddContactgroup(t *testing.T) {
 		Protocol: "http",
 	}
 
-	err := AddContactgroup(config, c, true)
+	err := AddContactgroup(config, cg, true)
 	if err != nil {
 		t.Error(err)
 	}
 
-	contactgroup, err := GetContactgroup(config, c.Name)
+	contactgroup, err := GetContactgroup(config, cg.Name)
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if !reflect.DeepEqual(c, contactgroup) {
+	if !reflect.DeepEqual(cg, contactgroup) {
 		t.Error("Mismatch between retrieved contactgroup and added contactgroup")
 	}
 }
 
 func TestDeleteContactgroup(t *testing.T) {
-	c := Contactgroup{
+	cg := Contactgroup{
 		Alias:               "Test contactgroup",
 		Name:                "testcontactgroup",
 		Members:             []string{"nagiosadmin"},
@@ -76,16 +76,16 @@ func TestDeleteContactgroup(t *testing.T) {
 		Protocol: "http",
 	}
 
-	err := AddContactgroup(config, c, true)
+	err := AddContactgroup(config, cg, true)
 	if err != nil {
 		t.Error(err)
 	}
-	err = DeleteContactgroup(config, c)
+	err = DeleteContactgroup(config, cg)
 	if err != nil {
 		t.Error(err)
 	}
 
-	_, err = GetContactgroup(config, c.Name)
+	_, err = GetContactgroup(config, cg.Name)
 	if err == nil {
 		t.Error(err)
 	}
@@ -93,7 +93,7 @@ func TestDeleteContactgroup(t *testing.T) {
 }
 
 func TestParseContactgroups(t *testing.T) {
-	c := []Contactgroup{
+	cg := []Contactgroup{
 		Contactgroup{
 			Alias:               "Contactgroup 1",
 			Name:                "contactgroup1",
@@ -114,7 +114,7 @@ func TestParseContactgroups(t *testing.T) {
 		t.Error(err)
 	}
 
-	if !reflect.DeepEqual(c, contactgroups) {
+	if !reflect.DeepEqual(cg, contactgroups) {
 		t.Error("Mismatch between parsed contactgroups and declared ones")
 	}
 }

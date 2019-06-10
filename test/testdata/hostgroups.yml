@@ -1,6 +1,5 @@
 ---
 
-# Be careful ! Every field must be a string !
 hostgroups:
   - alias: Hostgroup 1 
     hostgroupMembers:
