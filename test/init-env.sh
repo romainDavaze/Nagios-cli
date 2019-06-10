@@ -14,6 +14,9 @@ if [[ $? -ne 0 ]]; then
     echo "NagiosXI container not found. Creating it..."
     $docker run -d --name $container -p 0.0.0.0:8080:80 $image > /dev/null
     # Waiting for container to be ready
+    sleep 5
+    # Sometimes nagiosxi does not start for some reason, restarting container to make sure it does
+    docker restart $container > /dev/null
     sleep 10
     $docker inspect $container &> $tmpFile
 fi
