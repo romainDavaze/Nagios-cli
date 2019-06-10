@@ -102,14 +102,14 @@ func DeleteService(config Config, service Service) error {
 }
 
 // GetService retrives a service from NagiosXI
-func GetService(config Config, ServiceName string) (Service, error) {
+func GetService(config Config, configName, serviceDescription string) (Service, error) {
 	services := []Service{}
 
 	fullURL := fmt.Sprintf(config.Protocol + "://" + config.Host + ":" + strconv.Itoa(int(config.Port)) + "/" + config.BasePath + "/config/service?apikey=" +
-		config.APIKey + "&pretty=1&service_name=" + ServiceName)
+		config.APIKey + "&pretty=1&config_name=" + url.QueryEscape(configName) + "&service_description=" + url.QueryEscape(serviceDescription))
 	resp, err := http.Get(fullURL)
 	if err != nil {
-		return Service{}, fmt.Errorf("Error while retrieving %s service from NagiosXI: %s", ServiceName, err)
+		return Service{}, fmt.Errorf("Error while retrieving %q service for host(s) [%s] from NagiosXI: %s", serviceDescription, configName, err)
 	}
 
 	defer resp.Body.Close()
@@ -118,11 +118,11 @@ func GetService(config Config, ServiceName string) (Service, error) {
 
 	err = json.Unmarshal(body, &services)
 	if err != nil {
-		return Service{}, fmt.Errorf("Error while unmarshalling %s service from NagiosXI: %s", ServiceName, err)
+		return Service{}, fmt.Errorf("Error while unmarshalling %q service for host(s) [%s] from NagiosXI: %s", serviceDescription, configName, err)
 	}
 
 	if len(services) == 0 {
-		return Service{}, fmt.Errorf("Could not retrieve service %s from NagiosXI", ServiceName)
+		return Service{}, fmt.Errorf("Could not retrieve service %q for host(s) [%s] from NagiosXI", serviceDescription, configName)
 	}
 
 	return services[0], nil

@@ -1,7 +1,6 @@
 package nagiosxi
 
 import (
-	"fmt"
 	"os"
 	"reflect"
 	"testing"
@@ -52,9 +51,6 @@ func TestAddHost(t *testing.T) {
 	}
 
 	host, err := GetHost(config, h.Name)
-
-	fmt.Println(h)
-	fmt.Println(host)
 
 	if err != nil {
 		t.Error(err)

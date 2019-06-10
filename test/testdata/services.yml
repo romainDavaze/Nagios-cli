@@ -7,7 +7,7 @@ services:
       - 5000,100%
     checkInterval: "5"
     checkPeriod: 24x7
-    configName: Ping service
+    configName: localhost
     contacts: 
       - nagiosadmin
     contactGroups:
