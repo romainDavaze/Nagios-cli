@@ -1,5 +1,3 @@
----
-
 hostgroups:
   - alias: Hostgroup 1 
     hostgroupMembers:

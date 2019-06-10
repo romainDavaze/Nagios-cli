@@ -1,5 +1,3 @@
----
-
 servicegroups:
   - alias: Servicegroup 1 
     name: servicegroup1

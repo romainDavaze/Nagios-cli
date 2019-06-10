@@ -1,5 +1,3 @@
----
-
 # Be careful ! Every field must be a string !
 commands:
   - name: testCommand

@@ -1,5 +1,3 @@
----
-
 services:
   - checkCommand: check_ping
     checkCommandArgs:

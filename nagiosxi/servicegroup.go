@@ -72,12 +72,12 @@ func DeleteServicegroup(config Config, servicegroup Servicegroup) error {
 	return nil
 }
 
-// GetServiceGroup retrives a serviceGroup from NagiosXI
-func GetServiceGroup(config Config, serviceGroupName string) (Servicegroup, error) {
+// GetServicegroup retrives a serviceGroup from NagiosXI
+func GetServicegroup(config Config, serviceGroupName string) (Servicegroup, error) {
 	serviceGroups := []Servicegroup{}
 
-	fullURL := fmt.Sprintf(config.Protocol + "://" + config.Host + ":" + strconv.Itoa(int(config.Port)) + "/" + config.BasePath + "/config/serviceGroup?apikey=" +
-		config.APIKey + "&pretty=1&serviceGroup_name=" + serviceGroupName)
+	fullURL := fmt.Sprintf(config.Protocol + "://" + config.Host + ":" + strconv.Itoa(int(config.Port)) + "/" + config.BasePath + "/config/servicegroup?apikey=" +
+		config.APIKey + "&pretty=1&servicegroup_name=" + serviceGroupName)
 	resp, err := http.Get(fullURL)
 	if err != nil {
 		return Servicegroup{}, fmt.Errorf("Error while retrieving %s serviceGroup from NagiosXI: %s", serviceGroupName, err)
