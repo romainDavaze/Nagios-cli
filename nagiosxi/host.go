@@ -33,8 +33,8 @@ type Host struct {
 	Templates            []string `json:"use" schema:"use,omitempty" yaml:"templates"`
 }
 
-// Encode encodes service into a map[string][]string
-func (host *Host) Encode() (map[string][]string, error) {
+// Encode encodes a host into a map[string][]string
+func (host *Host) Encode(force bool) (map[string][]string, error) {
 	var argsString string
 	values := make(map[string][]string)
 
@@ -49,12 +49,17 @@ func (host *Host) Encode() (map[string][]string, error) {
 	}
 	values["check_command"] = []string{host.CheckCommand + argsString}
 
+	values["force"] = []string{BoolToStr(force)}
+
 	return values, err
 }
 
 // AddHost adds a host to NagiosXI
 func AddHost(config Config, host Host, force bool) error {
-	values, _ := host.Encode()
+	values, err := host.Encode(force)
+	if err != nil {
+		return fmt.Errorf("Error while encoding host %q: %s", host.Name, err)
+	}
 
 	resp, err := http.PostForm(config.Protocol+"://"+config.Host+":"+strconv.Itoa(int(config.Port))+"/"+config.BasePath+"/config/host?apikey="+config.APIKey+"&pretty=1", values)
 	if err != nil {
@@ -91,14 +96,14 @@ func DeleteHost(config Config, host Host) error {
 }
 
 // GetHost retrives a host from NagiosXI
-func GetHost(config Config, hostName string) (Host, error) {
+func GetHost(config Config, contactName string) (Host, error) {
 	hosts := []Host{}
 
 	fullURL := fmt.Sprintf(config.Protocol + "://" + config.Host + ":" + strconv.Itoa(int(config.Port)) + "/" + config.BasePath + "/config/host?apikey=" +
-		config.APIKey + "&pretty=1&host_name=" + hostName)
+		config.APIKey + "&pretty=1&host_name=" + contactName)
 	resp, err := http.Get(fullURL)
 	if err != nil {
-		return Host{}, fmt.Errorf("Error while retrieving %s host from NagiosXI: %s", hostName, err)
+		return Host{}, fmt.Errorf("Error while retrieving %s host from NagiosXI: %s", contactName, err)
 	}
 
 	defer resp.Body.Close()
@@ -107,11 +112,11 @@ func GetHost(config Config, hostName string) (Host, error) {
 
 	err = json.Unmarshal(body, &hosts)
 	if err != nil {
-		return Host{}, fmt.Errorf("Error while unmarshalling %s host from NagiosXI: %s", hostName, err)
+		return Host{}, fmt.Errorf("Error while unmarshalling %s host from NagiosXI: %s", contactName, err)
 	}
 
 	if len(hosts) == 0 {
-		return Host{}, fmt.Errorf("Could not retrieve host %s from NagiosXI", hostName)
+		return Host{}, fmt.Errorf("Could not retrieve host %s from NagiosXI", contactName)
 	}
 
 	return hosts[0], nil

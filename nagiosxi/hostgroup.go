@@ -19,12 +19,21 @@ type Hostgroup struct {
 	Name             string   `json:"hostgroup_name" schema:"hostgroup_name,omitempty" yaml:"name"`
 }
 
-// AddHostgroup adds a hostgroup to NagiosXI
-func AddHostgroup(config Config, hostgroup Hostgroup, force bool) error {
+// Encode encodes a hostgroup into a map[string][]string
+func (hostgroup *Hostgroup) Encode(force bool) (map[string][]string, error) {
 	values := make(map[string][]string)
 
 	encoder := InitEncoder()
 	err := encoder.Encode(hostgroup, values)
+
+	values["force"] = []string{BoolToStr(force)}
+
+	return values, err
+}
+
+// AddHostgroup adds a hostgroup to NagiosXI
+func AddHostgroup(config Config, hostgroup Hostgroup, force bool) error {
+	values, err := hostgroup.Encode(force)
 	if err != nil {
 		return fmt.Errorf("Error while encoding hostgroup %q: %s", hostgroup.Name, err)
 	}
@@ -64,14 +73,14 @@ func DeleteHostgroup(config Config, hostgroup Hostgroup) error {
 }
 
 // GetHostgroup retrives a hostgroup from NagiosXI
-func GetHostgroup(config Config, hostgroupName string) (Hostgroup, error) {
+func GetHostgroup(config Config, HostgroupName string) (Hostgroup, error) {
 	hostgroups := []Hostgroup{}
 
 	fullURL := fmt.Sprintf(config.Protocol + "://" + config.Host + ":" + strconv.Itoa(int(config.Port)) + "/" + config.BasePath + "/config/hostgroup?apikey=" +
-		config.APIKey + "&pretty=1&hostgroup_name=" + hostgroupName)
+		config.APIKey + "&pretty=1&hostgroup_name=" + HostgroupName)
 	resp, err := http.Get(fullURL)
 	if err != nil {
-		return Hostgroup{}, fmt.Errorf("Error while retrieving %s hostgroup from NagiosXI: %s", hostgroupName, err)
+		return Hostgroup{}, fmt.Errorf("Error while retrieving %s hostgroup from NagiosXI: %s", HostgroupName, err)
 	}
 
 	defer resp.Body.Close()
@@ -80,11 +89,11 @@ func GetHostgroup(config Config, hostgroupName string) (Hostgroup, error) {
 
 	err = json.Unmarshal(body, &hostgroups)
 	if err != nil {
-		return Hostgroup{}, fmt.Errorf("Error while unmarshalling %s hostgroup from NagiosXI: %s", hostgroupName, err)
+		return Hostgroup{}, fmt.Errorf("Error while unmarshalling %s hostgroup from NagiosXI: %s", HostgroupName, err)
 	}
 
 	if len(hostgroups) == 0 {
-		return Hostgroup{}, fmt.Errorf("Could not retrieve hostgroup %s from NagiosXI", hostgroupName)
+		return Hostgroup{}, fmt.Errorf("Could not retrieve hostgroup %s from NagiosXI", HostgroupName)
 	}
 
 	return hostgroups[0], nil

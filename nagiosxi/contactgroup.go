@@ -19,12 +19,21 @@ type Contactgroup struct {
 	Name                string   `json:"contactgroup_name" schema:"contactgroup_name,omitempty" yaml:"name"`
 }
 
-// AddContactgroup adds a contactgroup to NagiosXI
-func AddContactgroup(config Config, contactgroup Contactgroup, force bool) error {
+// Encode encodes a contactgroup into a map[string][]string
+func (contactgroup *Contactgroup) Encode(force bool) (map[string][]string, error) {
 	values := make(map[string][]string)
 
 	encoder := InitEncoder()
 	err := encoder.Encode(contactgroup, values)
+
+	values["force"] = []string{BoolToStr(force)}
+
+	return values, err
+}
+
+// AddContactgroup adds a contactgroup to NagiosXI
+func AddContactgroup(config Config, contactgroup Contactgroup, force bool) error {
+	values, err := contactgroup.Encode(force)
 	if err != nil {
 		return fmt.Errorf("Error while encoding contactgroup %q: %s", contactgroup.Name, err)
 	}

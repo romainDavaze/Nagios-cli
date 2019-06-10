@@ -7,6 +7,6 @@ hostgroups:
       - linux-servers
     members:
       - localhost
-      - machineA
+      - hostA
     name: hostgroup1
   # - alias: ...

@@ -24,7 +24,7 @@ func TestGetContact(t *testing.T) {
 	}
 
 	if contact.Name != c {
-		t.Error("Mismatch between request contact the response")
+		t.Error("Mismatch between requested contact and NagiosXI's response")
 	}
 }
 
@@ -50,7 +50,10 @@ func TestAddContact(t *testing.T) {
 		Protocol: "http",
 	}
 
-	AddContact(config, c, true)
+	err := AddContact(config, c, true)
+	if err != nil {
+		t.Error(err)
+	}
 
 	contact, err := GetContact(config, c.Name)
 	if err != nil {
@@ -84,10 +87,16 @@ func TestDeleteContact(t *testing.T) {
 		Protocol: "http",
 	}
 
-	AddContact(config, c, true)
-	DeleteContact(config, c)
+	err := AddContact(config, c, true)
+	if err != nil {
+		t.Error(err)
+	}
+	err = DeleteContact(config, c)
+	if err != nil {
+		t.Error(err)
+	}
 
-	_, err := GetContact(config, c.Name)
+	_, err = GetContact(config, c.Name)
 	if err == nil {
 		t.Error(err)
 	}

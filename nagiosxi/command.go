@@ -17,12 +17,21 @@ type Command struct {
 	CommandLine string `json:"command_line" schema:"command_line,omitempty" yaml:"commandLine"`
 }
 
-// AddCommand adds a command to NagiosXI
-func AddCommand(config Config, command Command, force bool) error {
+// Encode encodes a command into a map[string][]string
+func (command *Command) Encode(force bool) (map[string][]string, error) {
 	values := make(map[string][]string)
 
 	encoder := InitEncoder()
 	err := encoder.Encode(command, values)
+
+	values["force"] = []string{BoolToStr(force)}
+
+	return values, err
+}
+
+// AddCommand adds a command to NagiosXI
+func AddCommand(config Config, command Command, force bool) error {
+	values, err := command.Encode(force)
 	if err != nil {
 		return fmt.Errorf("Error while encoding command %q: %s", command.Name, err)
 	}

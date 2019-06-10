@@ -35,7 +35,7 @@ type Service struct {
 	Templates            []string `json:"use" schema:"use,omitempty" yaml:"templates"`
 }
 
-// Encode encodes service into a map[string][]string
+// Encode encodes a service into a map[string][]string
 func (service *Service) Encode(force bool) (map[string][]string, error) {
 	var argsString string
 	values := make(map[string][]string)
@@ -62,9 +62,10 @@ func (service *Service) Encode(force bool) (map[string][]string, error) {
 
 // AddService adds a service to NagiosXI
 func AddService(config Config, service Service, force bool) error {
-	values, _ := service.Encode(force)
-
-	fmt.Println(values)
+	values, err := service.Encode(force)
+	if err != nil {
+		return fmt.Errorf("Error while encoding service %q for hosts [%s]: %s", service.ServiceDescription, strings.Join(service.Hosts, ","), err)
+	}
 
 	resp, err := http.PostForm(config.Protocol+"://"+config.Host+":"+strconv.Itoa(int(config.Port))+"/"+config.BasePath+"/config/service?apikey="+config.APIKey+"&pretty=1", values)
 	if err != nil {

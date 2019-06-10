@@ -8,7 +8,7 @@ services:
       - 5000,100%
     checkInterval: "5"
     checkPeriod: 24x7
-    configName: configTest # If not specified, will equals to hosts array elements (ex: machineA localhost)
+    configName: configTest # If not specified, will equals to hosts array elements (ex: hostA localhost)
     contacts: 
       - nagiosadmin
     contactGroups:
@@ -18,7 +18,7 @@ services:
     hostGroups:
       - linux-servers
     hosts:
-      - machineA
+      - hostA
       - localhost
     maxCheckAttempts: "2"
     notificationInterval: "5"

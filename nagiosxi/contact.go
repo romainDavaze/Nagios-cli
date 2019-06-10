@@ -29,12 +29,21 @@ type Contact struct {
 	Templates                   []string `json:"use" schema:"use,omitempty" yaml:"templates"`
 }
 
-// AddContact adds a contact to NagiosXI
-func AddContact(config Config, contact Contact, force bool) error {
+// Encode encodes a contact into a map[string][]string
+func (contact *Contact) Encode(force bool) (map[string][]string, error) {
 	values := make(map[string][]string)
 
 	encoder := InitEncoder()
 	err := encoder.Encode(contact, values)
+
+	values["force"] = []string{BoolToStr(force)}
+
+	return values, err
+}
+
+// AddContact adds a contact to NagiosXI
+func AddContact(config Config, contact Contact, force bool) error {
+	values, err := contact.Encode(force)
 	if err != nil {
 		return fmt.Errorf("Error while encoding contact %q: %s", contact.Name, err)
 	}

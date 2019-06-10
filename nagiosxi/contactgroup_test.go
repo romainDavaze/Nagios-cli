@@ -24,7 +24,7 @@ func TestGetContactgroup(t *testing.T) {
 	}
 
 	if contactgroup.Name != c {
-		t.Error("Mismatch between request contactgroup the response")
+		t.Error("Mismatch between requested contactgroup and NagiosXI's response")
 	}
 }
 
@@ -44,7 +44,10 @@ func TestAddContactgroup(t *testing.T) {
 		Protocol: "http",
 	}
 
-	AddContactgroup(config, c, true)
+	err := AddContactgroup(config, c, true)
+	if err != nil {
+		t.Error(err)
+	}
 
 	contactgroup, err := GetContactgroup(config, c.Name)
 
@@ -73,10 +76,16 @@ func TestDeleteContactgroup(t *testing.T) {
 		Protocol: "http",
 	}
 
-	AddContactgroup(config, c, true)
-	DeleteContactgroup(config, c)
+	err := AddContactgroup(config, c, true)
+	if err != nil {
+		t.Error(err)
+	}
+	err = DeleteContactgroup(config, c)
+	if err != nil {
+		t.Error(err)
+	}
 
-	_, err := GetContactgroup(config, c.Name)
+	_, err = GetContactgroup(config, c.Name)
 	if err == nil {
 		t.Error(err)
 	}

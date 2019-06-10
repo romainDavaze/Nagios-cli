@@ -24,7 +24,7 @@ func TestGetCommand(t *testing.T) {
 	}
 
 	if command.Name != c {
-		t.Error("Mismatch between request command the response")
+		t.Error("Mismatch between requested command and NagiosXI's response")
 	}
 }
 
@@ -42,7 +42,10 @@ func TestAddCommand(t *testing.T) {
 		Protocol: "http",
 	}
 
-	AddCommand(config, c, true)
+	err := AddCommand(config, c, true)
+	if err != nil {
+		t.Error(err)
+	}
 
 	command, err := GetCommand(config, c.Name)
 	if err != nil {
@@ -68,10 +71,16 @@ func TestDeleteCommand(t *testing.T) {
 		Protocol: "http",
 	}
 
-	AddCommand(config, c, true)
-	DeleteCommand(config, c)
+	err := AddCommand(config, c, true)
+	if err != nil {
+		t.Error(err)
+	}
+	err = DeleteCommand(config, c)
+	if err != nil {
+		t.Error(err)
+	}
 
-	_, err := GetCommand(config, c.Name)
+	_, err = GetCommand(config, c.Name)
 	if err == nil {
 		t.Error(err)
 	}
