@@ -9,6 +9,9 @@ env:
 services:
   - docker
 
+before_script:
+  - sudo apt-get install -y jq
+
 script: make test
 
 deploy:
