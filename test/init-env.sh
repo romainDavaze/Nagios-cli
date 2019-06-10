@@ -12,7 +12,7 @@ $docker inspect $container &> $tmpFile
 
 if [[ $? -ne 0 ]]; then
     echo "NagiosXI container not found. Creating it..."
-    $docker run -d --name $container -p 8080:80 $image > /dev/null
+    $docker run -d --name $container -p 0.0.0.0:8080:80 $image > /dev/null
     # Waiting for container to be ready
     sleep 10
     $docker inspect $container &> $tmpFile
