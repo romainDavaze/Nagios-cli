@@ -8,7 +8,7 @@ import (
 )
 
 var applyConfigCmd = &cobra.Command{
-	Use:   "applyConfig",
+	Use:   "applyconfig",
 	Short: "Apply current NagiosXI configuration",
 	Long:  "Apply current NagiosXI configuration",
 	Run: func(cmd *cobra.Command, args []string) {
